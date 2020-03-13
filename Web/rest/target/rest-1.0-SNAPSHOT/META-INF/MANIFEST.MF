@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Created-By: IntelliJ IDEA
+Built-By: BMO_PC
+Build-Jdk: 11.0.5
+Class-Path: impl-1.0-SNAPSHOT.jar jstl-1.2.jar javax.servlet-api-4.0.1.j
+ ar jackson-databind-2.10.2.jar jackson-annotations-2.10.2.jar jackson-c
+ ore-2.10.2.jar jjwt-api-0.11.0.jar jjwt-impl-0.11.0.jar jjwt-jackson-0.
+ 11.0.jar log4j-1.2.17.jar
+
