@@ -7,13 +7,4 @@
     <display-name>ServletNew</display-name>
     <description>First servlet</description>
 
-    <servlet>
-        <servlet-name>AutorizationServlet</servlet-name>
-        <servlet-class>Servlets.AutorizationServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>AutorizationServlet</servlet-name>
-        <url-pattern>/logIn</url-pattern>
-    </servlet-mapping>
-
 </web-app>

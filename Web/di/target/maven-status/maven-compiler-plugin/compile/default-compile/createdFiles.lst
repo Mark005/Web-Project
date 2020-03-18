@@ -1,4 +1,3 @@
-com\nncompany\TestClass.class
-com\nncompany\Di.class
-com\nncompany\IDi.class
-com\nncompany\Main.class
+com\nncompany\di\Di.class
+com\nncompany\di\Main.class
+com\nncompany\di\TestClass.class
