@@ -1,6 +1,7 @@
-package servlets;
+package com.nncompany.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
 import com.nncompany.api.interfaces.ITokenHandler;
 import com.nncompany.api.interfaces.IUserCredsService;
 import com.nncompany.api.model.UserCreds;
@@ -11,7 +12,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -22,25 +22,10 @@ public class AutorizationServlet extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         IUserCredsService userCredsService = Di.getInstance().load(IUserCredsService.class);
         ITokenHandler tokenHandler = Di.getInstance().load(ITokenHandler.class);
-        resp.setContentType("text/html");
+
         PrintWriter out = resp.getWriter();
+        UserCreds requestUserCreds = mapper.readValue(req.getReader(), UserCreds.class);
 
-        StringBuffer jb = new StringBuffer();
-        String line = null;
-        try {
-            BufferedReader reader = req.getReader();
-            while ((line = reader.readLine()) != null)
-                jb.append(line);
-        } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        }
-
-        UserCreds requestUserCreds = null;
-        try {
-            requestUserCreds = mapper.readValue(jb.toString(), UserCreds.class);
-        } catch (Exception e){
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        }
         UserCreds userCreds = null;
         if(requestUserCreds.getLogin()!=null && requestUserCreds.getPass()!=null) {
             userCreds = userCredsService.getUserCredsByLogin(requestUserCreds.getLogin(), requestUserCreds.getPass());
@@ -48,9 +33,14 @@ public class AutorizationServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
         if(userCreds != null) {
-            String json = mapper.writeValueAsString(userCreds);
-            out.println(json);
-            out.println(tokenHandler.getToken(json));
+            JsonObject userJsonObj = new JsonObject();
+            userJsonObj.addProperty("id", userCreds.getUser().getId());
+            String json = userJsonObj.toString();
+
+            JsonObject token = new JsonObject();
+            token.addProperty("token", tokenHandler.getToken(json));
+            resp.setContentType("application/json");
+            out.println(token.toString());
         } else {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }

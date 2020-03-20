@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface IUserService {
 
-    User get(Session session, int id);
+    User get(int id);
 
-    List<User> getAll(Session session);
+    List<User> getAll();
 
-    void save(Session session, User user);
+    void save(User user);
 
-    void update(Session session, User user);
+    void update(User user);
 
-    void delete(Session session, User user);
+    void delete(User user);
 }

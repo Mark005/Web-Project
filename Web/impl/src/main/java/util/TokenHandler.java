@@ -47,12 +47,12 @@ public class TokenHandler implements ITokenHandler {
         Claims claims = Jwts.parser().setSigningKey(key)
                 .parseClaimsJws(token).getBody();
         String json =  claims.getSubject();
-        UserCreds userCreds = null;
+        User user = null;
         try {
-            userCreds = mapper.readValue(json, UserCreds.class);
+            user = mapper.readValue(json, User.class);
         } catch (Exception e){
             return null;
         }
-        return userCreds.getUser();
+        return user;
     }
 }

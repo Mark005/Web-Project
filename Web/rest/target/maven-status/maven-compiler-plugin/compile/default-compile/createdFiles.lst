@@ -1,0 +1,3 @@
+com\nncompany\filters\AuthFilter.class
+com\nncompany\servlets\AuthentificationServlet.class
+com\nncompany\servlets\AutorizationServlet.class

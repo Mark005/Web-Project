@@ -1,8 +1,6 @@
 package com.nncompany.api.interfaces;
 
-import com.nncompany.api.model.User;
 import com.nncompany.api.model.UserCreds;
-import org.hibernate.Session;
 
 import java.util.List;
 

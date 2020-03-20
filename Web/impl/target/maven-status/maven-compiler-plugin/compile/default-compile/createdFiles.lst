@@ -1,11 +1,8 @@
 sevice\UserCredsService.class
 store\UserStore.class
 util\UserKeeper.class
-filters\AuthFilter.class
 store\AbstractDao.class
-servlets\AutorizationServlet.class
 util\HibernateManager.class
 sevice\UserService.class
-servlets\Authentification.class
 store\UserCredsStore.class
 util\TokenHandler.class
