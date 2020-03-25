@@ -1,8 +1,8 @@
-sevice\UserCredsService.class
-store\UserStore.class
-util\UserKeeper.class
-store\AbstractDao.class
-util\HibernateManager.class
-sevice\UserService.class
-store\UserCredsStore.class
-util\TokenHandler.class
+com\nncompany\impl\util\TokenHandler.class
+com\nncompany\impl\store\UserStore.class
+com\nncompany\impl\util\UserKeeper.class
+com\nncompany\impl\sevice\UserService.class
+com\nncompany\impl\sevice\UserCredsService.class
+com\nncompany\impl\util\HibernateManager.class
+com\nncompany\impl\store\UserCredsStore.class
+com\nncompany\impl\store\AbstractDao.class

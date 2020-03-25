@@ -1,26 +1,18 @@
 package com.nncompany.servlets;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nncompany.api.model.User;
-import util.UserKeeper;
+import com.nncompany.impl.util.UserKeeper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+@RestController
+@RequestMapping("/creds/user")
+public class AuthentificationServlet{
 
-@WebServlet("/creds/user")
-public class AuthentificationServlet extends HttpServlet {
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ObjectMapper mapper = new ObjectMapper();
-
-        resp.setContentType("application/json");
-        PrintWriter out = resp.getWriter();
-        User user = UserKeeper.getLoggedUser();
-        out.println(mapper.writeValueAsString(user));
+    @PostMapping()
+    protected ResponseEntity<User> checkUser(){
+        return ResponseEntity.ok(UserKeeper.getLoggedUser());
     }
 }

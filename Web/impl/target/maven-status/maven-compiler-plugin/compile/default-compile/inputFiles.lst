@@ -1,8 +1,8 @@
-E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\store\UserStore.java
-E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\util\UserKeeper.java
-E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\store\AbstractDao.java
-E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\store\UserCredsStore.java
-E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\util\HibernateManager.java
-E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\sevice\UserService.java
-E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\util\TokenHandler.java
-E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\sevice\UserCredsService.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\com\nncompany\impl\util\UserKeeper.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\com\nncompany\impl\store\AbstractDao.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\com\nncompany\impl\util\TokenHandler.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\com\nncompany\impl\sevice\UserCredsService.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\com\nncompany\impl\store\UserStore.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\com\nncompany\impl\sevice\UserService.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\com\nncompany\impl\store\UserCredsStore.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\impl\src\main\java\com\nncompany\impl\util\HibernateManager.java

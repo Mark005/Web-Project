@@ -40,9 +40,7 @@
           <element id="library" level="project" name="Maven: javax.persistence:javax.persistence-api:2.2" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.12" />
           <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:2.6.0" />
-          <element id="archive" name="di-1.0-SNAPSHOT.jar">
-            <element id="module-output" name="di" />
-          </element>
+          <element id="library" level="project" name="Maven: com.nncompany.di:di:1.0-SNAPSHOT" />
           <element id="library" level="project" name="Maven: jstl:jstl:1.2" />
           <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:4.0.1" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.10.2" />
@@ -53,6 +51,14 @@
           <element id="library" level="project" name="Maven: io.jsonwebtoken:jjwt-jackson:0.11.0" />
           <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.0" />
           <element id="library" level="project" name="Maven: log4j:log4j:1.2.17" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-core:5.2.4.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.2.4.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context:5.2.4.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-aop:5.2.4.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-beans:5.2.4.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-expression:5.2.4.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-web:5.2.4.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:5.2.4.RELEASE" />
         </element>
       </element>
       <element id="directory" name="META-INF">

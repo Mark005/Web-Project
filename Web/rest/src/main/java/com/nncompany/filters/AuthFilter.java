@@ -3,24 +3,27 @@ package com.nncompany.filters;
 import com.nncompany.api.interfaces.ITokenHandler;
 import com.nncompany.api.interfaces.IUserService;
 import com.nncompany.api.model.User;
-import com.nncompany.di.Di;
-import util.UserKeeper;
+import com.nncompany.impl.util.UserKeeper;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
-@WebFilter("/creds/*")
+@Component
+@Order(1)
 public class AuthFilter implements Filter {
+    ITokenHandler tokenHandler;
+    IUserService userService;
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-        ITokenHandler tokenHandler = Di.getInstance().load(ITokenHandler.class);
-        IUserService userService = Di.getInstance().load(IUserService.class);
 
         String token = httpServletRequest.getHeader("token");
         if (tokenHandler.checkToken(token)) {
@@ -35,7 +38,10 @@ public class AuthFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
+        ApplicationContext ctx = WebApplicationContextUtils
+                .getRequiredWebApplicationContext(filterConfig.getServletContext());
+        this.tokenHandler = ctx.getBean(ITokenHandler.class);
+        this.userService = ctx.getBean(IUserService.class);
     }
 
     @Override
