@@ -2,20 +2,24 @@ package com.nncompany.impl.store;
 
 import com.nncompany.api.interfaces.IUserCredsStore;
 import com.nncompany.api.model.UserCreds;
-import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 public class UserCredsStore extends AbstractDao<UserCreds> implements IUserCredsStore {
+
+    @Autowired
+    private SessionFactory sessionFactory;
 
     public UserCredsStore(){
         super(UserCreds.class);
     }
 
     @Override
-    public UserCreds getByLogin(Session session, String login, String pass){
-        Query query = session.createQuery("from UserCreds u where u.login =:log and u.pass =:pas");
+    public UserCreds getByLogin(String login, String pass){
+        Query query = sessionFactory.getCurrentSession().createQuery("from UserCreds u where u.login =:log and u.pass =:pas");
         query.setParameter("log", login);
         query.setParameter("pas", pass);
         query.setMaxResults(1);

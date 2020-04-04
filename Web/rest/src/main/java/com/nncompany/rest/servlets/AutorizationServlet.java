@@ -1,4 +1,4 @@
-package com.nncompany.servlets;
+package com.nncompany.rest.servlets;
 
 import com.google.gson.JsonObject;
 import com.nncompany.api.interfaces.ITokenHandler;
@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @RestController
+@EnableSwagger2
 @RequestMapping("/logIn")
 public class AutorizationServlet{
     @Autowired

@@ -1,4 +1,4 @@
-package com.nncompany.servlets;
+package com.nncompany.rest.servlets;
 
 import com.nncompany.api.model.User;
 import com.nncompany.impl.util.UserKeeper;

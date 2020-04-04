@@ -4,54 +4,46 @@ import com.nncompany.api.interfaces.IUserService;
 import com.nncompany.api.interfaces.IUserStore;
 import com.nncompany.api.model.User;
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.nncompany.impl.util.HibernateManager;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Component
+@Service
 public class UserService implements IUserService {
 
     private final Logger log = Logger.getLogger(this.getClass());
 
     @Autowired
-    HibernateManager hibernateManager;
-
-    @Autowired
     private IUserStore userStore;
 
     @Override
+    @Transactional
     public User get(int id) {
-        User user = null;
-        try (Session session = hibernateManager.getSessionFactory().openSession()) {
-            session.beginTransaction();
-            user = userStore.get(session, id);
-            session.getTransaction().commit();
-            return user;
-        } catch (Exception e){
-            log.error(e.getMessage());
-        }
-        return user;
+        return userStore.get(id);
     }
 
     @Override
+    @Transactional
     public List<User> getAll() {
         return null;
     }
 
     @Override
+    @Transactional
     public void save(User user) {
 
     }
 
     @Override
+    @Transactional
     public void update(User user) {
 
     }
 
     @Override
+    @Transactional
     public void delete(User user) {
 
     }

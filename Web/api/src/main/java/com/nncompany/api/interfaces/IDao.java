@@ -1,19 +1,18 @@
 package com.nncompany.api.interfaces;
 
 import com.nncompany.api.exception.DBException;
-import org.hibernate.Session;
 
 import java.util.List;
 
 public interface IDao<T> {
 
-    T get(Session session, int id) throws DBException;
+    T get(int id);
 
-    List<T> getAll(Session session) throws DBException;
+    List<T> getAll();
 
-    void save(Session session, T t) throws DBException;
+    void save(T t);
 
-    void update(Session session, T t) throws DBException;
+    void update(T t);
 
-    void delete(Session session, T t) throws DBException;
+    void delete(T t);
 }

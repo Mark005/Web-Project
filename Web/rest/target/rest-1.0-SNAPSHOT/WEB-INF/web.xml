@@ -26,7 +26,7 @@
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>
-                /WEB-INF/spring/servConfig/restServ-servlet.xml
+                /WEB-INF/spring/servletConfig/rest-servlet.xml
             </param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
@@ -35,17 +35,6 @@
         <servlet-name>restServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-
-
-    <filter>
-        <filter-name>AuthFilter</filter-name>
-        <filter-class>com.nncompany.filters.AuthFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>AuthFilter</filter-name>
-        <url-pattern>/creds/*</url-pattern>
-    </filter-mapping>
-
 
 </web-app>
 
