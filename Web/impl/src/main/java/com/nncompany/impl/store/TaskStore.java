@@ -25,9 +25,9 @@ public class TaskStore extends AbstractDao<Task> implements ITaskStore {
     @Override
     public List<Task> getUsersTasks(User user, TaskSatus taskSatus, TaskType taskType) {
         Query query = sessionFactory.getCurrentSession().createQuery("from Task t " +
-                "where t.executor =:user " +
-                "and t.status =: status " +
-                "and t.type =: type");
+                                                                        "where t.executor =:user " +
+                                                                        "and t.status =: status " +
+                                                                        "and t.type =: type");
         query.setParameter("user", user);
         query.setParameter("status", taskSatus);
         query.setParameter("type", taskType);
@@ -37,8 +37,8 @@ public class TaskStore extends AbstractDao<Task> implements ITaskStore {
     @Override
     public List<Task> getTasks(TaskSatus taskSatus, TaskType taskType) {
         Query query = sessionFactory.getCurrentSession().createQuery("from Task t " +
-                "where  t.status =: status " +
-                   "and t.type =: type");
+                                                                        "where  t.status =: status " +
+                                                                        "and t.type =: type");
         query.setParameter("status", taskSatus);
         query.setParameter("type", taskType);
         return query.list();

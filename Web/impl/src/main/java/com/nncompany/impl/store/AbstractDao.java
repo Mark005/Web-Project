@@ -1,7 +1,6 @@
 package com.nncompany.impl.store;
 
 import com.nncompany.api.interfaces.IDao;
-import com.nncompany.api.model.entities.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +24,24 @@ abstract class AbstractDao<T> implements IDao<T>{
         return (T) sessionFactory.getCurrentSession().get(entityClass, id);
     }
 
+
+    @Override
+    public Integer getTotalCount() {
+        String countQ = "Select count (f.id) from " + entityClass.getName() + " f";
+        Query countQuery = sessionFactory.getCurrentSession().createQuery(countQ);
+        return ((Long) countQuery.uniqueResult()).intValue();
+    }
+
     @Override
     public List<T> getAll(){
         return sessionFactory.getCurrentSession().createQuery("from " + entityClass.getName()).list();
     }
 
     @Override
-    public List<T> getWithPagination(Integer offset, Integer limit){
+    public List<T> getWithPagination(Integer page, Integer pageSize){
         Query query = sessionFactory.getCurrentSession().createQuery("from " + entityClass.getName());
-        query.setFirstResult(offset);
-        query.setMaxResults(limit);
+        query.setFirstResult(page*pageSize);
+        query.setMaxResults(pageSize);
         return query.list();
     }
 

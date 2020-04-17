@@ -38,7 +38,7 @@
         <property name="ignoreResourceNotFound" value="true" />
         <property name="locations">
             <list>
-                <value>classpath:props/database.properties</value>
+                <value>classpath:database.properties</value>
             </list>
         </property>
     </bean>

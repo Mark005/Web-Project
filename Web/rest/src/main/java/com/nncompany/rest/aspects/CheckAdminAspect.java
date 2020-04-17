@@ -1,5 +1,6 @@
 package com.nncompany.rest.aspects;
 
+import com.nncompany.api.model.wrappers.RequestError;
 import com.nncompany.impl.util.UserKeeper;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -29,7 +30,10 @@ public class CheckAdminAspect {
     @Around("briefings() || tasks() || userBriefing()")
     public Object beforeCallAtMethod1(ProceedingJoinPoint joinPoint) throws Throwable {
         if(!UserKeeper.getLoggedUser().isAdmin()){
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new RequestError(403,
+                                                        "access denied",
+                                                        "you haven't access for this operation, relogin as administrator"),
+                                                        HttpStatus.FORBIDDEN);
         } else {
             return joinPoint.proceed();
         }

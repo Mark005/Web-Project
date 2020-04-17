@@ -10,7 +10,9 @@ public interface IBriefingService {
 
     List<Briefing> getAll();
 
-    List<Briefing> getWithPagination(Integer offset, Integer limit);
+    Integer getTotalCount();
+
+    List<Briefing> getWithPagination(Integer page, Integer pageSize);
 
     void save(Briefing briefing);
 

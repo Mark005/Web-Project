@@ -27,8 +27,13 @@ public class BriefingService implements IBriefingService {
     }
 
     @Override
-    public List<Briefing> getWithPagination(Integer offset, Integer limit) {
-        return briefingStore.getWithPagination(offset, limit);
+    public Integer getTotalCount() {
+        return briefingStore.getTotalCount();
+    }
+
+    @Override
+    public List<Briefing> getWithPagination(Integer page, Integer pageSize) {
+        return briefingStore.getWithPagination(page, pageSize);
     }
 
     @Override

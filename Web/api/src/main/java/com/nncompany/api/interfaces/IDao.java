@@ -10,6 +10,8 @@ public interface IDao<T> {
 
     List<T> getWithPagination(Integer offset, Integer limit);
 
+    Integer getTotalCount();
+
     void save(T t);
 
     void update(T t);
