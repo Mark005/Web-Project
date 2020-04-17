@@ -1,6 +1,6 @@
 package com.nncompany.impl.util;
 
-import com.nncompany.api.model.User;
+import com.nncompany.api.model.entities.User;
 
 public class UserKeeper {
 

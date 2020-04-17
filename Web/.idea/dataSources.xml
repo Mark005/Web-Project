@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="hibernate.cfg.xml/Hibernate" uuid="d47db07a-d188-4a19-82fb-010f793d52f4">
+    <data-source source="LOCAL" name="usersDb@localhost" uuid="d47db07a-d188-4a19-82fb-010f793d52f4">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <imported>true</imported>
@@ -9,7 +9,13 @@
 
 E:/Progects/1_Programming_Projects/Rep's/Project/Web/api/src/main/resources/hibernate.cfg.xml</remarks>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost/usersDb?serverTimezone=UTC</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/usersDb?serverTimezone=UTC</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="companyDb@localhost" uuid="24ff0de4-7003-4056-b1e3-6e7771321eb2">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/companyDb?serverTimezone=UTC</jdbc-url>
     </data-source>
   </component>
 </project>

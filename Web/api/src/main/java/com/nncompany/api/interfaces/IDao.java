@@ -1,7 +1,5 @@
 package com.nncompany.api.interfaces;
 
-import com.nncompany.api.exception.DBException;
-
 import java.util.List;
 
 public interface IDao<T> {
@@ -10,9 +8,13 @@ public interface IDao<T> {
 
     List<T> getAll();
 
+    List<T> getWithPagination(Integer offset, Integer limit);
+
     void save(T t);
 
     void update(T t);
 
     void delete(T t);
+
+
 }

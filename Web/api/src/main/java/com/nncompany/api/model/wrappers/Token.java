@@ -1,4 +1,4 @@
-package com.nncompany.api.model;
+package com.nncompany.api.model.wrappers;
 
 public class Token {
     String token;

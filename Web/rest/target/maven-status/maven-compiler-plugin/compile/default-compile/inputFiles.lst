@@ -1,3 +1,10 @@
-E:\Progects\1_Programming_Projects\Rep's\Project\alt\Web\rest\src\main\java\com\nncompany\rest\filters\AuthFilter.java
-E:\Progects\1_Programming_Projects\Rep's\Project\alt\Web\rest\src\main\java\com\nncompany\rest\servlets\AuthentificationServlet.java
-E:\Progects\1_Programming_Projects\Rep's\Project\alt\Web\rest\src\main\java\com\nncompany\rest\servlets\AutorizationServlet.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\rest\src\main\java\com\nncompany\rest\servlets\AutorizationServlet.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\rest\src\main\java\com\nncompany\rest\servlets\RegistrationServlet.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\rest\src\main\java\com\nncompany\rest\servlets\DialogServlet.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\rest\src\main\java\com\nncompany\rest\servlets\UserBriefingServlet.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\rest\src\main\java\com\nncompany\rest\servlets\BriefingServlet.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\rest\src\main\java\com\nncompany\rest\servlets\UserServlet.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\rest\src\main\java\com\nncompany\rest\servlets\ChatServlet.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\rest\src\main\java\com\nncompany\rest\servlets\TaskServlet.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\rest\src\main\java\com\nncompany\rest\filters\AuthFilter.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\rest\src\main\java\com\nncompany\rest\config\SwaggerConfig.java

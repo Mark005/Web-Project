@@ -24,8 +24,6 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
-        <!-- Our DI -->
-
         <dependency>
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>

@@ -1,8 +1,8 @@
 package com.nncompany.rest.filters;
 
 import com.nncompany.api.interfaces.ITokenHandler;
-import com.nncompany.api.interfaces.IUserService;
-import com.nncompany.api.model.User;
+import com.nncompany.api.interfaces.services.IUserService;
+import com.nncompany.api.model.entities.User;
 import com.nncompany.impl.util.UserKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

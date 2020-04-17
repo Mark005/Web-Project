@@ -1,16 +1,20 @@
 package com.nncompany.impl.store;
 
 import com.nncompany.api.interfaces.IDao;
+import com.nncompany.api.model.entities.User;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 abstract class AbstractDao<T> implements IDao<T>{
-    Class<T> entityClass;
+
+    private Class<T> entityClass;
 
     @Autowired
     private SessionFactory sessionFactory;
+
 
     protected AbstractDao(Class<T> entityClass) {
         this.entityClass = entityClass;
@@ -23,9 +27,15 @@ abstract class AbstractDao<T> implements IDao<T>{
 
     @Override
     public List<T> getAll(){
-        List<T> autorepairs;
-        autorepairs = sessionFactory.getCurrentSession().createQuery("from" + entityClass.getCanonicalName(), entityClass).list();
-        return autorepairs;
+        return sessionFactory.getCurrentSession().createQuery("from " + entityClass.getName()).list();
+    }
+
+    @Override
+    public List<T> getWithPagination(Integer offset, Integer limit){
+        Query query = sessionFactory.getCurrentSession().createQuery("from " + entityClass.getName());
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+        return query.list();
     }
 
     @Override

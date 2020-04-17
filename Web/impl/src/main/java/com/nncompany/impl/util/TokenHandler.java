@@ -3,7 +3,7 @@ package com.nncompany.impl.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nncompany.api.interfaces.ITokenHandler;
 
-import com.nncompany.api.model.User;
+import com.nncompany.api.model.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -21,7 +21,8 @@ public class TokenHandler implements ITokenHandler {
 
     public TokenHandler(){
         System.out.println("initttt");
-        key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        //key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        key = Keys.hmacShaKeyFor(new byte[256]);
     }
 
     @Override
@@ -36,12 +37,14 @@ public class TokenHandler implements ITokenHandler {
 
     @Override
     public boolean checkToken(String token) {
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
-        } catch (JwtException e) {
-            return false;
-        }
+        if(token !=null && !token.equals("")) {
+            try {
+                Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+                return true;
+            } catch (JwtException e) {
+                return false;
+            }
+        } else return false;
     }
 
     @Override

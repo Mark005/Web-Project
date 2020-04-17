@@ -1,27 +1,28 @@
-package com.nncompany.api.model;
-
+package com.nncompany.api.model.entities;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
-@Table(name = "usercreds")
+@Table(name = "user_creds")
 public class UserCreds{
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-
+    private Integer id;
     @Column(name = "login")
-    String login;
+    private String login;
 
     @Column(name = "pass")
-    String pass;
+    private String pass;
 
     @OneToOne()
     @JoinColumn(name = "user_fk")
-    User user;
+    private User user;
+
+
+
+
 
     public Integer getId() {
         return id;
