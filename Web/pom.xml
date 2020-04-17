@@ -19,7 +19,6 @@
         <module>rest</module>
         <module>api</module>
         <module>impl</module>
-
     </modules>
 
     <dependencies>
@@ -87,7 +86,6 @@
             <artifactId>swagger-jaxrs</artifactId>
             <version>1.6.0</version>
         </dependency>
-
     </dependencies>
 
     <build>

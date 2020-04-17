@@ -11,10 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class CheckAdminAspect {
 
-    public CheckAdminAspect(){
-        System.out.println("Aut--*-*-*-**-*-*-*-*");
-    }
-
     @Pointcut("execution(public * com.nncompany.rest.servlets.BriefingServlet.addBriefing(..)) || " +
               "execution(public * com.nncompany.rest.servlets.BriefingServlet.updateBriefing(..)) || " +
               "execution(public * com.nncompany.rest.servlets.BriefingServlet.deleteBriefing(..))")
@@ -32,7 +28,6 @@ public class CheckAdminAspect {
 
     @Around("briefings() || tasks() || userBriefing()")
     public Object beforeCallAtMethod1(ProceedingJoinPoint joinPoint) throws Throwable {
-        System.out.println("--*-*-*-**-*-*-*-*");
         if(!UserKeeper.getLoggedUser().isAdmin()){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         } else {
