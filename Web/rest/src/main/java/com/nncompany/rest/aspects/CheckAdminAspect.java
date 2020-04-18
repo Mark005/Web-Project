@@ -28,7 +28,7 @@ public class CheckAdminAspect {
     public void userBriefing() { }
 
     @Around("briefings() || tasks() || userBriefing()")
-    public Object beforeCallAtMethod1(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object checkAdminStatus(ProceedingJoinPoint joinPoint) throws Throwable {
         if(!UserKeeper.getLoggedUser().isAdmin()){
             return new ResponseEntity<>(new RequestError(403,
                                                         "access denied",

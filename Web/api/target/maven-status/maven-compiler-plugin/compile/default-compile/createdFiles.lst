@@ -6,6 +6,7 @@ com\nncompany\api\model\wrappers\Token.class
 com\nncompany\api\model\entities\Message.class
 com\nncompany\api\model\enums\Gender.class
 com\nncompany\api\interfaces\services\IUserBriefingService.class
+com\nncompany\api\model\wrappers\ResponseList.class
 com\nncompany\api\interfaces\services\IMessageService.class
 com\nncompany\api\interfaces\stors\IUserStore.class
 com\nncompany\api\model\entities\UserBriefing.class

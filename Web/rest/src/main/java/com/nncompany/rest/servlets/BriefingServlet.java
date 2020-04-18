@@ -30,12 +30,6 @@ public class BriefingServlet {
     @GetMapping("/briefings")
     public ResponseEntity<Object> getAllBriefings(@RequestParam Integer page,
                                                   @RequestParam Integer pageSize){
-        if(page < 0 || pageSize < 1) {
-            return new ResponseEntity<>(new RequestError(400,
-                                                        "query params error",
-                                                        "query params must be: page >= 0 and pageSize > 0"),
-                                                        HttpStatus.BAD_REQUEST);
-        }
         List<Briefing> briefings = briefingService.getWithPagination(page, pageSize);
         if(briefings != null) {
             return ResponseEntity.ok(new ResponseList(briefings, briefingService.getTotalCount()));
@@ -55,12 +49,6 @@ public class BriefingServlet {
     })
     @GetMapping("/briefings/{id}")
     public ResponseEntity<Object> getBriefingById(@PathVariable Integer id){
-        if(id < 1) {
-            return new ResponseEntity<>(new RequestError(400,
-                                                        "path variable error",
-                                                        "path variable must be > 0"),
-                                                        HttpStatus.BAD_REQUEST);
-        }
         Briefing briefing = briefingService.get(id);
         if(briefing == null) {
             return new ResponseEntity<>(new RequestError(404,
@@ -94,12 +82,6 @@ public class BriefingServlet {
     @PutMapping("/briefings/{id}")
     public ResponseEntity updateBriefing(@PathVariable Integer id,
                                          @RequestBody Briefing briefing){
-        if(id < 1) {
-            return new ResponseEntity<>(new RequestError(400,
-                                                        "path variable error",
-                                                        "path variable must be > 0"),
-                                                        HttpStatus.BAD_REQUEST);
-        }
         if(briefingService.get(id) == null) {
             return new ResponseEntity<>(new RequestError(404,
                                                         "briefings not found",
@@ -120,12 +102,6 @@ public class BriefingServlet {
     })
     @DeleteMapping("/briefings/{id}")
     public ResponseEntity deleteBriefing(@PathVariable Integer id){
-        if(id < 1) {
-            return new ResponseEntity<>(new RequestError(400,
-                                                        "path variable error",
-                                                        "path variable must be > 0"),
-                                                        HttpStatus.BAD_REQUEST);
-        }
         Briefing briefing = briefingService.get(id);
         if(briefing == null) {
             return new ResponseEntity<>(new RequestError(404,

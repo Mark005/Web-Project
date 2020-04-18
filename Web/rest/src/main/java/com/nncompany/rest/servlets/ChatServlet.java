@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/rest/creds")
@@ -54,12 +53,6 @@ public class ChatServlet {
     })
     @GetMapping("/chat/{msgId}")
     public ResponseEntity<Object> getChatsMessage(@PathVariable Integer msgId){
-        if(msgId < 1) {
-            return new ResponseEntity<>(new RequestError(400,
-                                                        "path variable error",
-                                                        "path variable must be > 0"),
-                                                        HttpStatus.BAD_REQUEST);
-        }
         Message dbMessage = messageService.get(msgId);
         if(dbMessage == null){
             return new ResponseEntity<>(new RequestError(404,
@@ -99,12 +92,6 @@ public class ChatServlet {
     @PatchMapping("/chat/{msgId}")
     public ResponseEntity changeChatsMessage(@PathVariable Integer msgId,
                                              @RequestBody Message message){
-        if(msgId < 1) {
-            return new ResponseEntity<>(new RequestError(400,
-                                                        "path variable error",
-                                                        "path variable must be > 0"),
-                                                        HttpStatus.BAD_REQUEST);
-        }
         Message dbMessage = messageService.get(msgId);
         if(dbMessage == null){
             return new ResponseEntity<>(new RequestError(404,
@@ -133,12 +120,6 @@ public class ChatServlet {
     })
     @DeleteMapping("/chat/{msgId}")
     public ResponseEntity deleteChatsMessage(@PathVariable Integer msgId){
-        if(msgId < 1) {
-            return new ResponseEntity<>(new RequestError(400,
-                                                        "path variable error",
-                                                        "path variable must be > 0"),
-                                                        HttpStatus.BAD_REQUEST);
-        }
         Message dbMessage = messageService.get(msgId);
         if(dbMessage == null){
             return new ResponseEntity<>(new RequestError(404,

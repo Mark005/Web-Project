@@ -25,5 +25,6 @@ E:\Progects\1_Programming_Projects\Rep's\Project\Web\api\src\main\java\com\nncom
 E:\Progects\1_Programming_Projects\Rep's\Project\Web\api\src\main\java\com\nncompany\api\interfaces\stors\IUserCredsStore.java
 E:\Progects\1_Programming_Projects\Rep's\Project\Web\api\src\main\java\com\nncompany\api\model\entities\UserCreds.java
 E:\Progects\1_Programming_Projects\Rep's\Project\Web\api\src\main\java\com\nncompany\api\interfaces\services\IUserCredsService.java
+E:\Progects\1_Programming_Projects\Rep's\Project\Web\api\src\main\java\com\nncompany\api\model\wrappers\ResponseList.java
 E:\Progects\1_Programming_Projects\Rep's\Project\Web\api\src\main\java\com\nncompany\api\model\enums\TaskType.java
 E:\Progects\1_Programming_Projects\Rep's\Project\Web\api\src\main\java\com\nncompany\api\interfaces\services\IBriefingService.java
