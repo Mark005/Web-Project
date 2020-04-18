@@ -29,8 +29,8 @@ public class MessageService implements IMessageService {
     }
 
     @Override
-    public List<Message> getWithPagination(Integer offset, Integer limit) {
-        return messageStore.getWithPagination(offset, limit);
+    public List<Message> getWithPagination(Integer page, Integer pageSize) {
+        return messageStore.getWithPagination(page, pageSize);
     }
 
     @Override

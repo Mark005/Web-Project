@@ -12,7 +12,7 @@ public interface IMessageService {
 
     List<Message> getAll();
 
-    List<Message> getWithPagination(Integer offset, Integer limit);
+    List<Message> getWithPagination(Integer page, Integer pageSize);
 
     List<Message> getDialogWithPagination(User userOne, User userTwo, Integer offset, Integer limit);
 

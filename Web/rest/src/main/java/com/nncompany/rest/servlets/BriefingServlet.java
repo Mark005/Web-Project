@@ -47,6 +47,30 @@ public class BriefingServlet {
         }
     }
 
+    @ApiOperation(value = "Get briefing by id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Briefing received successfully", response = Briefing.class),
+            @ApiResponse(code = 400, message = "Invalid path variable", response = RequestError.class),
+            @ApiResponse(code = 404, message = "Can't find briefing", response = RequestError.class)
+    })
+    @GetMapping("/briefings/{id}")
+    public ResponseEntity<Object> getBriefingById(@PathVariable Integer id){
+        if(id < 1) {
+            return new ResponseEntity<>(new RequestError(400,
+                                                        "path variable error",
+                                                        "path variable must be > 0"),
+                                                        HttpStatus.BAD_REQUEST);
+        }
+        Briefing briefing = briefingService.get(id);
+        if(briefing == null) {
+            return new ResponseEntity<>(new RequestError(404,
+                    "briefing not found",
+                    "briefing deleted or not created"),
+                    HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(briefing);
+    }
+
     @ApiOperation(value = "Add new briefing")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Briefing created successfully"),
@@ -70,6 +94,12 @@ public class BriefingServlet {
     @PutMapping("/briefings/{id}")
     public ResponseEntity updateBriefing(@PathVariable Integer id,
                                          @RequestBody Briefing briefing){
+        if(id < 1) {
+            return new ResponseEntity<>(new RequestError(400,
+                                                        "path variable error",
+                                                        "path variable must be > 0"),
+                                                        HttpStatus.BAD_REQUEST);
+        }
         if(briefingService.get(id) == null) {
             return new ResponseEntity<>(new RequestError(404,
                                                         "briefings not found",
@@ -90,15 +120,20 @@ public class BriefingServlet {
     })
     @DeleteMapping("/briefings/{id}")
     public ResponseEntity deleteBriefing(@PathVariable Integer id){
+        if(id < 1) {
+            return new ResponseEntity<>(new RequestError(400,
+                                                        "path variable error",
+                                                        "path variable must be > 0"),
+                                                        HttpStatus.BAD_REQUEST);
+        }
         Briefing briefing = briefingService.get(id);
-        if(briefing != null){
-            briefingService.delete(briefing);
-        } else {
+        if(briefing == null) {
             return new ResponseEntity<>(new RequestError(404,
                                                         "briefings not found",
                                                         "briefing with current id is not found"),
                                                         HttpStatus.NOT_FOUND);
         }
+        briefingService.delete(briefing);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
