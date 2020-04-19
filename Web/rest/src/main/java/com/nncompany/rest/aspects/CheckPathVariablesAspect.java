@@ -38,11 +38,18 @@ public class CheckPathVariablesAspect {
               "execution(public * com.nncompany.rest.servlets.UserBriefingServlet.deleteConductedBriefing(..)) && args(id, ..)")
     public void userBriefing(Integer id) { }
 
+    @Pointcut("execution(public * com.nncompany.rest.servlets.UserServlet.getUserById(..)) && args(id, ..) ||" +
+              "execution(public * com.nncompany.rest.servlets.UserServlet.updateUser(..)) && args(id, ..) ||" +
+              "execution(public * com.nncompany.rest.servlets.UserServlet.deleteUser(..)) && args(id, ..)")
+    public void users(Integer id) { }
+
+
     @Around("briefings(id)  || " +
             "chat(id) ||" +
             "dialog(id) ||" +
             "tasks(id) ||" +
-            "userBriefing(id)")
+            "userBriefing(id) ||" +
+            "users(id)")
     public Object checkPathVariable(ProceedingJoinPoint joinPoint, Integer id) throws Throwable {
         if(id < 1) {
             return new ResponseEntity<>(new RequestError(400,

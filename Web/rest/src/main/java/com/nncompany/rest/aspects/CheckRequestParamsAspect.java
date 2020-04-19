@@ -25,10 +25,14 @@ public class CheckRequestParamsAspect {
     @Pointcut("execution(public * com.nncompany.rest.servlets.TaskServlet.getAllTasks(..)) && args(page, pageSize, ..)")
     public void tasks(Integer page, Integer pageSize) { }
 
+    @Pointcut("execution(public * com.nncompany.rest.servlets.UserServlet.getUsers(..)) && args(page, pageSize, ..)")
+    public void users(Integer page, Integer pageSize) { }
+
     @Around("briefings(page, pageSize) || " +
             "chat(page, pageSize) || " +
             "dialogs(page, pageSize) ||" +
-            "tasks(page, pageSize)")
+            "tasks(page, pageSize) ||" +
+            "users(page, pageSize)")
     public Object checkRequestParams(ProceedingJoinPoint joinPoint, Integer page, Integer pageSize) throws Throwable {
         if(page < 0 || pageSize < 1) {
             return new ResponseEntity<>(new RequestError(400,

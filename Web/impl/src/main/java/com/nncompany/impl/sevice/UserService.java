@@ -28,8 +28,13 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<User> getWithPagination(Integer offset, Integer limit) {
-        return userStore.getWithPagination(offset, limit);
+    public List<User> getWithPagination(Integer page, Integer pageSize) {
+        return userStore.getWithPagination(page, pageSize);
+    }
+
+    @Override
+    public Integer getTotalCount() {
+        return userStore.getTotalCount();
     }
 
     @Override

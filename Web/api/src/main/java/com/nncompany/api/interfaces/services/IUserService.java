@@ -10,7 +10,9 @@ public interface IUserService {
 
     List<User> getAll();
 
-    List<User> getWithPagination(Integer offset, Integer limit);
+    List<User> getWithPagination(Integer page, Integer pageSize);
+
+    Integer getTotalCount();
 
     void save(User user);
 

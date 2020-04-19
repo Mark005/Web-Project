@@ -8,7 +8,7 @@ public interface IDao<T> {
 
     List<T> getAll();
 
-    List<T> getWithPagination(Integer offset, Integer limit);
+    List<T> getWithPagination(Integer page, Integer pageSize);
 
     Integer getTotalCount();
 
