@@ -71,7 +71,6 @@ public class BriefingServlet {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-
     @ApiOperation(value = "Update briefing by id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Briefing updated successfully"),

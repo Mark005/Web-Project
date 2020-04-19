@@ -35,13 +35,9 @@ public class ChatServlet {
     @GetMapping("/chat")
     public ResponseEntity<Object> getChatsMessages(@RequestParam Integer page,
                                                    @RequestParam Integer pageSize){
-        if(page < 0 || pageSize < 1) {
-            return new ResponseEntity<>(new RequestError(400,
-                                                        "query params error",
-                                                        "query params must be: page >= 0 and pageSize > 0"),
-                                                        HttpStatus.BAD_REQUEST);
-        }
-        return ResponseEntity.ok(messageService.getChatWithPagination(page, pageSize));
+        ResponseList responseList = new ResponseList<>(messageService.getChatWithPagination(page, pageSize),
+                                                       messageService.getTotalCountMessagesInDialog(UserKeeper.getLoggedUser(),null));
+        return ResponseEntity.ok(responseList);
     }
 
     @ApiOperation(value = "Get chat's message by id")

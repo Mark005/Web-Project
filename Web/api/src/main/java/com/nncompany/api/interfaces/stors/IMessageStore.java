@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface IMessageStore extends IDao<Message> {
 
-    List<Message> getDialogWithPagination(User userOne, User userTwo, Integer offset, Integer limit);
+    Integer getTotalCountMessagesInDialog(User userOne, User userTwo);
 
-    List<Message> getChatWithPagination(Integer offset, Integer limit);
+    List<Message> getDialogWithPagination(User userOne, User userTwo, Integer page, Integer pageSize);
+
+    List<Message> getChatWithPagination(Integer page, Integer pageSize);
 }

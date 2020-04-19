@@ -29,13 +29,18 @@ public class MessageService implements IMessageService {
     }
 
     @Override
+    public Integer getTotalCountMessagesInDialog(User userOne, User userTwo){
+        return messageStore.getTotalCountMessagesInDialog(userOne, userTwo);
+    }
+
+    @Override
     public List<Message> getWithPagination(Integer page, Integer pageSize) {
         return messageStore.getWithPagination(page, pageSize);
     }
 
     @Override
-    public List<Message> getDialogWithPagination(User userOne, User userTwo, Integer offset, Integer limit) {
-        return messageStore.getDialogWithPagination(userOne, userTwo, offset, limit);
+    public List<Message> getDialogWithPagination(User userOne, User userTwo, Integer page, Integer pageSize) {
+        return messageStore.getDialogWithPagination(userOne, userTwo, page, pageSize);
     }
 
     @Override

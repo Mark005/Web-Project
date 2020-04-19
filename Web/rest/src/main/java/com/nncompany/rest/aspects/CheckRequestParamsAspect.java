@@ -16,7 +16,15 @@ public class CheckRequestParamsAspect {
     @Pointcut("execution(public * com.nncompany.rest.servlets.BriefingServlet.*(..)) && args(page, pageSize, ..)")
     public void briefings(Integer page, Integer pageSize) { }
 
-    @Around("briefings(page ,pageSize)")
+    @Pointcut("execution(public * com.nncompany.rest.servlets.ChatServlet.getChatsMessages(..)) && args(page, pageSize, ..)")
+    public void chat(Integer page, Integer pageSize) { }
+
+    @Pointcut("execution(public * com.nncompany.rest.servlets.DialogServlet.getDialogWithUser(..)) && args(*, page, pageSize, ..)")
+    public void dialogs(Integer page, Integer pageSize) { }
+
+    @Around("briefings(page, pageSize) || " +
+            "chat(page, pageSize) || " +
+            "dialogs(page, pageSize)")
     public Object checkRequestParams(ProceedingJoinPoint joinPoint, Integer page, Integer pageSize) throws Throwable {
         if(page < 0 || pageSize < 1) {
             return new ResponseEntity<>(new RequestError(400,

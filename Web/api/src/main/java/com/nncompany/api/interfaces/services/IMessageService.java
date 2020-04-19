@@ -12,11 +12,13 @@ public interface IMessageService {
 
     List<Message> getAll();
 
+    Integer getTotalCountMessagesInDialog(User userOne, User userTwo);
+
     List<Message> getWithPagination(Integer page, Integer pageSize);
 
-    List<Message> getDialogWithPagination(User userOne, User userTwo, Integer offset, Integer limit);
+    List<Message> getDialogWithPagination(User userOne, User userTwo, Integer page, Integer pageSize);
 
-    List<Message> getChatWithPagination(Integer offset, Integer limit);
+    List<Message> getChatWithPagination(Integer page, Integer pageSize);
 
     void save(Message message);
 

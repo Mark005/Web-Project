@@ -22,25 +22,43 @@ public class MessageStore extends AbstractDao<Message> implements IMessageStore 
     }
 
     @Override
-    public List<Message> getDialogWithPagination(User userOne, User userTwo, Integer offset, Integer limit) {
+    public Integer getTotalCountMessagesInDialog(User userOne, User userTwo){
+        Query query;
+        if (userTwo == null) {
+            query = sessionFactory.getCurrentSession()
+                                  .createQuery("Select count (m.id) from Message m " +
+                                                                        "where m.userTo is null");
+        } else {
+            query = sessionFactory.getCurrentSession()
+                                  .createQuery("Select count (m.id)from Message m " +
+                                                                      "where (m.userFrom =:userOne and m.userTo =: userTwo) " +
+                                                                      "or (m.userFrom =:userTwo and m.userTo =: userOne) ");
+        }
+        query.setParameter("userOne", userOne);
+        query.setParameter("userTwo", userTwo);
+        return ((Long) query.uniqueResult()).intValue();
+    }
+
+    @Override
+    public List<Message> getDialogWithPagination(User userOne, User userTwo, Integer page, Integer pageSize) {
         Query query = sessionFactory.getCurrentSession().createQuery("from Message m " +
                                                                         "where (m.userFrom =:userOne and m.userTo =: userTwo) " +
                                                                         "or (m.userFrom =:userTwo and m.userTo =: userOne) " +
                                                                         "ORDER BY m.date");
         query.setParameter("userOne", userOne);
         query.setParameter("userTwo", userTwo);
-        query.setFirstResult(offset);
-        query.setMaxResults(limit);
+        query.setFirstResult(page*pageSize);
+        query.setMaxResults(pageSize);
         return query.list();
     }
 
     @Override
-    public List<Message> getChatWithPagination(Integer offset, Integer limit) {
+    public List<Message> getChatWithPagination(Integer page, Integer pageSize) {
         Query query = sessionFactory.getCurrentSession().createQuery("from Message m " +
                 "where m.userTo is null " +
                 "ORDER BY m.date");
-        query.setFirstResult(offset);
-        query.setMaxResults(limit);
+        query.setFirstResult(page*pageSize);
+        query.setMaxResults(pageSize);
         return query.list();
     }
 }

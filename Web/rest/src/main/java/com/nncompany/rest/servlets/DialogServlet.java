@@ -5,7 +5,11 @@ import com.nncompany.api.interfaces.services.IUserService;
 import com.nncompany.api.model.entities.Message;
 import com.nncompany.api.model.entities.User;
 import com.nncompany.api.model.wrappers.RequestError;
+import com.nncompany.api.model.wrappers.ResponseList;
 import com.nncompany.impl.util.UserKeeper;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,10 +29,16 @@ public class DialogServlet {
     @Autowired
     IUserService userService;
 
+    @ApiOperation(value = "Get dialog with user by 'userId' with pagination")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Dialog received successfully", response = ResponseList.class),
+            @ApiResponse(code = 400, message = "Invalid path variable or query params", response = RequestError.class),
+            @ApiResponse(code = 404, message = "Target user not found", response = RequestError.class),
+    })
     @GetMapping("/dialog/{userId}")
     public ResponseEntity<Object> getDialogWithUser(@PathVariable Integer userId,
-                                                           @RequestParam Integer offset,
-                                                           @RequestParam Integer limit){
+                                                    @RequestParam Integer page,
+                                                    @RequestParam Integer pageSize){
         User one = UserKeeper.getLoggedUser();
         User two = userService.get(userId);
         if(two == null){
@@ -37,18 +47,21 @@ public class DialogServlet {
                                                         "user deleted or not created"),
                                                         HttpStatus.NOT_FOUND);
         }
-        if(offset < 0 || limit < 0){
-            return new ResponseEntity<>(new RequestError(400,
-                                                        "request param error",
-                                                        "request params must be numbers >= 0"),
-                                                        HttpStatus.BAD_REQUEST);
-        }
-        return ResponseEntity.ok(messageService.getDialogWithPagination(one, two, offset, limit));
+        ResponseList responseList = new ResponseList<>(messageService.getDialogWithPagination(one, two, page, pageSize),
+                                                       messageService.getTotalCountMessagesInDialog(one,two));
+        return ResponseEntity.ok(responseList);
     }
 
+    @ApiOperation(value = "Get message by id from dialog with user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Dialog received successfully", response = Message.class),
+            @ApiResponse(code = 400, message = "Invalid path variable", response = RequestError.class),
+            @ApiResponse(code = 403, message = "Current message from another dialog", response = RequestError.class),
+            @ApiResponse(code = 404, message = "Target user or message not found", response = RequestError.class),
+    })
     @GetMapping("/dialog/{userId}/{msgId}")
-    public ResponseEntity<Object> getDialogWithUser(@PathVariable Integer userId,
-                                                     @PathVariable Integer msgId){
+    public ResponseEntity<Object> getMessageFromDialogWithUser(@PathVariable Integer userId,
+                                                               @PathVariable Integer msgId){
         User one = UserKeeper.getLoggedUser();
         User two = userService.get(userId);
         Message dbMessage = messageService.get(msgId);
@@ -67,30 +80,53 @@ public class DialogServlet {
            dbMessage.getUserFrom().equals(two) && dbMessage.getUserTo().equals(one)) {
             return ResponseEntity.ok(dbMessage);
         } else {
-            return new ResponseEntity<>(new RequestError(404,
-                                                         "target user not found",
+            return new ResponseEntity<>(new RequestError(403,
+                                                         "access denied to target message",
                                                          "requested message is not in the current dialog"),
-                                                          HttpStatus.NOT_FOUND);
+                                                          HttpStatus.FORBIDDEN);
         }
     }
 
+    @ApiOperation(value = "Send message to user by 'userId'")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Message sent successfully"),
+            @ApiResponse(code = 400, message = "Invalid path variable", response = RequestError.class),
+            @ApiResponse(code = 404, message = "Target user not found", response = RequestError.class),
+    })
     @PostMapping("/dialog/{userId}")
     public ResponseEntity sendDialogMessage(@PathVariable Integer userId,
                                             @RequestBody Message message){
         message.setUserFrom(UserKeeper.getLoggedUser());
-        message.setUserTo(userService.get(userId));
+        User userTo = userService.get(userId);
+        if(userTo == null){
+            return new ResponseEntity<>(new RequestError(404,
+                                                        "target user not found",
+                                                        "user deleted or not created"),
+                                                        HttpStatus.NOT_FOUND);
+        }
+        message.setUserTo(userTo);
         message.setDate(new Date());
         messageService.save(message);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Change message's text by message id from dialog with user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Message text changed successfully"),
+            @ApiResponse(code = 400, message = "Invalid path variable", response = RequestError.class),
+            @ApiResponse(code = 403, message = "Current message from another dialog", response = RequestError.class),
+            @ApiResponse(code = 404, message = "Target message not found", response = RequestError.class),
+    })
     @PatchMapping("/dialog/{userId}/{msgId}")
     public ResponseEntity changeDialogsMessage(@PathVariable Integer userId,
                                                @PathVariable Integer msgId,
                                                @RequestBody Message message ){
         Message dbMessage = messageService.get(msgId);
         if(dbMessage == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new RequestError(404,
+                                                        "target message not found",
+                                                        "message deleted or not created"),
+                                                        HttpStatus.NOT_FOUND);
         }
         if(dbMessage.getUserFrom().equals(UserKeeper.getLoggedUser()) &&
            dbMessage.getUserTo().equals(userService.get(userId))) {
@@ -98,23 +134,39 @@ public class DialogServlet {
             messageService.update(dbMessage);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new RequestError(403,
+                                                        "access denied to target message",
+                                                        "requested message is not in the current dialog"),
+                                                        HttpStatus.FORBIDDEN);
         }
     }
 
+    @ApiOperation(value = "Delete message by message id from dialog with user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Message deleted successfully"),
+            @ApiResponse(code = 400, message = "Invalid path variable", response = RequestError.class),
+            @ApiResponse(code = 403, message = "Current message from another dialog", response = RequestError.class),
+            @ApiResponse(code = 404, message = "Target message not found", response = RequestError.class),
+    })
     @DeleteMapping("/dialog/{userId}/{msgId}")
     public ResponseEntity deleteDialogsMessage(@PathVariable Integer userId,
                                                @PathVariable Integer msgId ){
         Message dbMessage = messageService.get(msgId);
         if(dbMessage == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new RequestError(404,
+                                                        "target message not found",
+                                                        "message deleted or not created"),
+                                                        HttpStatus.NOT_FOUND);
         }
         if(dbMessage.getUserFrom().equals(UserKeeper.getLoggedUser()) &&
                 dbMessage.getUserTo().equals(userService.get(userId))) {
             messageService.delete(dbMessage);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new RequestError(403,
+                                                        "access denied to target message",
+                                                        "requested message is not in the current dialog"),
+                                                        HttpStatus.FORBIDDEN);
         }
     }
 }
