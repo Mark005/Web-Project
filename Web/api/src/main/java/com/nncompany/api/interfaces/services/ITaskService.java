@@ -17,7 +17,11 @@ public interface ITaskService {
 
     List<Task> getUsersTasks(User user, TaskSatus taskSatus, TaskType taskType);
 
-    List<Task> getTasks(TaskSatus taskSatus, TaskType taskType);
+    Integer getTotalCountForGetUsersTasks(User user, TaskSatus taskSatus, TaskType taskType);
+
+    List<Task> getAll(Integer page, Integer pageSize, TaskSatus taskSatus, TaskType taskType);
+
+    Integer getTotalCountForGetAll(TaskSatus taskSatus, TaskType taskType);
 
     void save(Task task);
 

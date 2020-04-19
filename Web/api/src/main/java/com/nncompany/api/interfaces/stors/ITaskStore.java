@@ -12,5 +12,9 @@ public interface ITaskStore extends IDao<Task> {
 
     List<Task> getUsersTasks(User user, TaskSatus taskSatus, TaskType taskType);
 
-    List<Task> getTasks(TaskSatus taskSatus, TaskType taskType);
+    Integer getTotalCountForGetUsersTasks(User user, TaskSatus taskSatus, TaskType taskType);
+
+    List<Task> getAll(Integer page, Integer pageSize,TaskSatus taskSatus, TaskType taskType);
+
+    Integer getTotalCountForGetAll(TaskSatus taskSatus, TaskType taskType);
 }

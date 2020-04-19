@@ -28,9 +28,14 @@ public class CheckPathVariablesAspect {
               "execution(public * com.nncompany.rest.servlets.DialogServlet.deleteDialogsMessage(..)) && args(userId, ..)")
     public void dialog(Integer userId) { }
 
+    @Pointcut("execution(public * com.nncompany.rest.servlets.TaskServlet.changeTask(..)) && args(id, ..) ||" +
+              "execution(public * com.nncompany.rest.servlets.TaskServlet.deleteTask(..)) && args(id, ..)")
+    public void tasks(Integer id) { }
+
     @Around("briefings(id)  || " +
             "chat(id) ||" +
-            "dialog(id) ")
+            "dialog(id) ||" +
+            "tasks(id)")
     public Object checkPathVariable(ProceedingJoinPoint joinPoint, Integer id) throws Throwable {
         if(id < 1) {
             return new ResponseEntity<>(new RequestError(400,

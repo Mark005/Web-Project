@@ -40,8 +40,18 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public List<Task> getTasks(TaskSatus taskSatus, TaskType taskType) {
-        return taskStore.getTasks(taskSatus, taskType);
+    public Integer getTotalCountForGetUsersTasks(User user, TaskSatus taskSatus, TaskType taskType) {
+        return taskStore.getTotalCountForGetUsersTasks(user, taskSatus, taskType);
+    }
+
+    @Override
+    public List<Task> getAll(Integer page, Integer pageSize,TaskSatus taskSatus, TaskType taskType) {
+        return taskStore.getAll(page, pageSize, taskSatus, taskType);
+    }
+
+    @Override
+    public Integer getTotalCountForGetAll(TaskSatus taskSatus, TaskType taskType) {
+        return taskStore.getTotalCountForGetAll(taskSatus, taskType);
     }
 
     @Override

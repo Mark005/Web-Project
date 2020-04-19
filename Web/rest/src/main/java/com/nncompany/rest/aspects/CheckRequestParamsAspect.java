@@ -22,9 +22,13 @@ public class CheckRequestParamsAspect {
     @Pointcut("execution(public * com.nncompany.rest.servlets.DialogServlet.getDialogWithUser(..)) && args(*, page, pageSize, ..)")
     public void dialogs(Integer page, Integer pageSize) { }
 
+    @Pointcut("execution(public * com.nncompany.rest.servlets.TaskServlet.getAllTasks(..)) && args(page, pageSize, ..)")
+    public void tasks(Integer page, Integer pageSize) { }
+
     @Around("briefings(page, pageSize) || " +
             "chat(page, pageSize) || " +
-            "dialogs(page, pageSize)")
+            "dialogs(page, pageSize) ||" +
+            "tasks(page, pageSize)")
     public Object checkRequestParams(ProceedingJoinPoint joinPoint, Integer page, Integer pageSize) throws Throwable {
         if(page < 0 || pageSize < 1) {
             return new ResponseEntity<>(new RequestError(400,

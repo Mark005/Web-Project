@@ -35,12 +35,36 @@ public class TaskStore extends AbstractDao<Task> implements ITaskStore {
     }
 
     @Override
-    public List<Task> getTasks(TaskSatus taskSatus, TaskType taskType) {
+    public Integer getTotalCountForGetUsersTasks(User user, TaskSatus taskSatus, TaskType taskType){
+        Query query = sessionFactory.getCurrentSession().createQuery("Select count (t.id)from Task t " +
+                                                                                            "where t.executor =:user " +
+                                                                                            "and t.status =: status " +
+                                                                                            "and t.type =: type");
+        query.setParameter("user", user);
+        query.setParameter("status", taskSatus);
+        query.setParameter("type", taskType);
+        return ((Long) query.uniqueResult()).intValue();
+    }
+
+    @Override
+    public List<Task> getAll(Integer page, Integer pageSize, TaskSatus taskSatus, TaskType taskType) {
         Query query = sessionFactory.getCurrentSession().createQuery("from Task t " +
                                                                         "where  t.status =: status " +
                                                                         "and t.type =: type");
         query.setParameter("status", taskSatus);
         query.setParameter("type", taskType);
+        query.setFirstResult(page*pageSize);
+        query.setMaxResults(pageSize);
         return query.list();
+    }
+
+    @Override
+    public Integer getTotalCountForGetAll(TaskSatus taskSatus, TaskType taskType) {
+        Query query = sessionFactory.getCurrentSession().createQuery("Select count (t.id) from Task t " +
+                                                                                            "where  t.status =: status " +
+                                                                                            "and t.type =: type");
+        query.setParameter("status", taskSatus);
+        query.setParameter("type", taskType);
+        return ((Long) query.uniqueResult()).intValue();
     }
 }
