@@ -4,6 +4,7 @@ import com.nncompany.api.interfaces.services.IUserCredsService;
 import com.nncompany.api.interfaces.services.IUserService;
 import com.nncompany.api.model.entities.UserCreds;
 import com.nncompany.api.model.wrappers.BooleanResponse;
+import com.nncompany.api.model.wrappers.RequestError;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -28,13 +29,16 @@ public class RegistrationServlet {
 
     @ApiOperation(value = "Check if the login is busy")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Received response in json"),
-            @ApiResponse(code = 400, message = "Invalid or lost login field")
+            @ApiResponse(code = 200, message = "Received response in json", response = BooleanResponse.class),
+            @ApiResponse(code = 400, message = "Invalid or not added login field", response = RequestError.class)
     })
     @PostMapping("/checkLogin")
-    public ResponseEntity<BooleanResponse> login(@RequestBody UserCreds requestUserCreds) {
+    public ResponseEntity<Object> login(@RequestBody UserCreds requestUserCreds) {
         if(requestUserCreds.getLogin() == null ){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new RequestError(400,
+                                                        "invalid request json",
+                                                        "json must have login"),
+                                                        HttpStatus.BAD_REQUEST);
         }
         if (userCredsService.checkLogin(requestUserCreds.getLogin())) {
             return ResponseEntity.ok(new BooleanResponse(true));
@@ -44,6 +48,10 @@ public class RegistrationServlet {
     }
 
     @ApiOperation(value = "Registration new user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "New user registered successfully"),
+            @ApiResponse(code = 400, message = "Invalid input json, check models for more info", response = RequestError.class)
+    })
     @PostMapping("/user")
     public ResponseEntity registration(@RequestBody UserCreds requestUserCreds) {
         userService.save(requestUserCreds.getUser());
