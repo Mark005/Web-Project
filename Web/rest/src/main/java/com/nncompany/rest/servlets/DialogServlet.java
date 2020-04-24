@@ -48,7 +48,7 @@ public class DialogServlet {
                                                         HttpStatus.NOT_FOUND);
         }
         ResponseList responseList = new ResponseList<>(messageService.getDialogWithPagination(one, two, page, pageSize),
-                                                       messageService.getTotalCountMessagesInDialog(one,two));
+                                                       messageService.getTotalCountMessages(one,two));
         return ResponseEntity.ok(responseList);
     }
 

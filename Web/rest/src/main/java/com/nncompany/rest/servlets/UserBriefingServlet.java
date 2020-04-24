@@ -76,15 +76,18 @@ public class UserBriefingServlet {
             @ApiResponse(code = 400, message = "Invalid request params", response = RequestError.class),
     })
     @GetMapping("/briefings")
-    public ResponseEntity<Object> getAll(@RequestParam UserBriefingSort sort,
+    public ResponseEntity<Object> getAll(@RequestParam Integer page,
+                                         @RequestParam Integer pageSize,
+                                         @RequestParam UserBriefingSort sort,
                                          @RequestParam Direction direction) {
         if (sort == null || direction == null) {
             return new ResponseEntity<>(new RequestError(400,
                                                         "invalid request params",
-                                                        "one of request params = null, for more info check available params"),
+                                                        "one of request params(sort or direction) = null, " +
+                                                                   "for more info check available params"),
                                                         HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok(userBriefingService.getAll(sort, direction));
+        return ResponseEntity.ok(userBriefingService.getAll(page, pageSize, sort, direction));
     }
 
 

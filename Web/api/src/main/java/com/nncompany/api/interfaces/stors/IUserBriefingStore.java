@@ -15,5 +15,5 @@ public interface IUserBriefingStore extends IDao<UserBriefing> {
 
     List<User> getUsersByCurrentBriefing(Briefing briefing);
 
-    List<UserBriefing> getAll(UserBriefingSort sort, Direction direction);
+    List<UserBriefing> getAll(Integer page, Integer pageSize, UserBriefingSort sort, Direction direction);
 }

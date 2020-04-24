@@ -16,5 +16,5 @@ public interface IUserCredsService {
 
     Boolean checkLogin(String login);
 
-
+    void update(UserCreds userCreds);
 }

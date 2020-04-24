@@ -36,7 +36,7 @@ public class ChatServlet {
     public ResponseEntity<Object> getChatsMessages(@RequestParam Integer page,
                                                    @RequestParam Integer pageSize){
         ResponseList responseList = new ResponseList<>(messageService.getChatWithPagination(page, pageSize),
-                                                       messageService.getTotalCountMessagesInDialog(UserKeeper.getLoggedUser(),null));
+                                                       messageService.getTotalCountMessages(UserKeeper.getLoggedUser(),null));
         return ResponseEntity.ok(responseList);
     }
 

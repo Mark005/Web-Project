@@ -38,10 +38,11 @@ public class UserBriefingStore extends AbstractDao<UserBriefing> implements IUse
     }
 
     @Override
-    public List<UserBriefing> getAll(UserBriefingSort sort, Direction direction) {
+    public List<UserBriefing> getAll(Integer page, Integer pageSize, UserBriefingSort sort, Direction direction) {
         String hql = "FROM UserBriefing u ORDER BY u." + sort.getTitle() + " " + direction;
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
-        //Query query = sessionFactory.getCurrentSession().createQuery("from UserBriefing");
+        query.setFirstResult(page*pageSize);
+        query.setMaxResults(pageSize);
         return query.list();
     }
 }

@@ -22,7 +22,7 @@ public class MessageStore extends AbstractDao<Message> implements IMessageStore 
     }
 
     @Override
-    public Integer getTotalCountMessagesInDialog(User userOne, User userTwo){
+    public Integer getTotalCountMessages(User userOne, User userTwo){
         Query query;
         if (userTwo == null) {
             query = sessionFactory.getCurrentSession()
@@ -33,9 +33,9 @@ public class MessageStore extends AbstractDao<Message> implements IMessageStore 
                                   .createQuery("Select count (m.id)from Message m " +
                                                                       "where (m.userFrom =:userOne and m.userTo =: userTwo) " +
                                                                       "or (m.userFrom =:userTwo and m.userTo =: userOne) ");
+            query.setParameter("userOne", userOne);
+            query.setParameter("userTwo", userTwo);
         }
-        query.setParameter("userOne", userOne);
-        query.setParameter("userTwo", userTwo);
         return ((Long) query.uniqueResult()).intValue();
     }
 

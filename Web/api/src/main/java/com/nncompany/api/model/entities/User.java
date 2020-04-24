@@ -58,12 +58,12 @@ public class User {
         this.name = name;
     }
 
-    public String getSurename() {
+    public String getSurname() {
         return surname;
     }
 
-    public void setSurename(String surename) {
-        this.surname = surename;
+    public void setSurename(String surname) {
+        this.surname = surname;
     }
 
     public Gender getGender() {

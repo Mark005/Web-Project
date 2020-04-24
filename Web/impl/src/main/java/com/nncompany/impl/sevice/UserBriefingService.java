@@ -42,8 +42,13 @@ public class UserBriefingService implements IUserBriefingService {
     }
 
     @Override
-    public List<UserBriefing> getAll(UserBriefingSort sort, Direction direction) {
-        return userBriefingStore.getAll(sort, direction);
+    public Integer getTotalCount() {
+        return userBriefingStore.getTotalCount();
+    }
+
+    @Override
+    public List<UserBriefing> getAll(Integer page, Integer pageSize, UserBriefingSort sort, Direction direction) {
+        return userBriefingStore.getAll(page, pageSize, sort, direction);
     }
 
     @Override

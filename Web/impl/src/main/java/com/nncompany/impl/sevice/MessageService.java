@@ -29,8 +29,8 @@ public class MessageService implements IMessageService {
     }
 
     @Override
-    public Integer getTotalCountMessagesInDialog(User userOne, User userTwo){
-        return messageStore.getTotalCountMessagesInDialog(userOne, userTwo);
+    public Integer getTotalCountMessages(User userOne, User userTwo){
+        return messageStore.getTotalCountMessages(userOne, userTwo);
     }
 
     @Override

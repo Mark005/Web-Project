@@ -12,7 +12,7 @@ public interface IMessageService {
 
     List<Message> getAll();
 
-    Integer getTotalCountMessagesInDialog(User userOne, User userTwo);
+    Integer getTotalCountMessages(User userOne, User userTwo);
 
     List<Message> getWithPagination(Integer page, Integer pageSize);
 

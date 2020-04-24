@@ -14,8 +14,6 @@ import java.util.List;
 @Transactional
 public class UserCredsService implements IUserCredsService {
 
-    private final Logger log = Logger.getLogger(this.getClass());
-
     @Autowired
     private IUserCredsStore userCredsStore;
 
@@ -42,5 +40,10 @@ public class UserCredsService implements IUserCredsService {
     @Override
     public void save(UserCreds userCreds) {
         userCredsStore.save(userCreds);
+    }
+
+    @Override
+    public void update(UserCreds userCreds) {
+        userCredsStore.update(userCreds);
     }
 }
