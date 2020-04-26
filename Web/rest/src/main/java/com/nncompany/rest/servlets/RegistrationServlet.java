@@ -54,6 +54,7 @@ public class RegistrationServlet {
     })
     @PostMapping("/user")
     public ResponseEntity registration(@RequestBody UserCreds requestUserCreds) {
+        requestUserCreds.getUser().setAdmin(false);
         userService.save(requestUserCreds.getUser());
         userCredsService.save(requestUserCreds);
         return new ResponseEntity<>(HttpStatus.CREATED);

@@ -1,4 +1,4 @@
-package com.nncompany.impl.sevice;
+package com.nncompany.impl.service;
 
 import com.nncompany.api.interfaces.services.IUserBriefingService;
 import com.nncompany.api.interfaces.stors.IUserBriefingStore;

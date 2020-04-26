@@ -20,7 +20,8 @@ public class AuthFilter extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response, Object handler) throws Exception {
+                             HttpServletResponse response,
+                             Object handler){
         String token = request.getHeader("token");
         if (tokenHandler.checkToken(token)) {
             User inputUser = tokenHandler.getUserFromToken(token);

@@ -1,9 +1,8 @@
-package com.nncompany.impl.sevice;
+package com.nncompany.impl.service;
 
 import com.nncompany.api.interfaces.services.IUserCredsService;
 import com.nncompany.api.interfaces.stors.IUserCredsStore;
 import com.nncompany.api.model.entities.UserCreds;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,9 +1,8 @@
-package com.nncompany.impl.sevice;
+package com.nncompany.impl.service;
 
 import com.nncompany.api.interfaces.services.IMessageService;
 import com.nncompany.api.interfaces.stors.IMessageStore;
 import com.nncompany.api.model.entities.Message;
-import com.nncompany.api.model.entities.Task;
 import com.nncompany.api.model.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

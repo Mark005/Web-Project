@@ -166,7 +166,6 @@ public class ServiceTest {
     @Test
     public void userCredsServiceTest(){
 
-
         User user = new User();
             user.setCertificateNumber(1);
             user.setName("aaabbbccc");
