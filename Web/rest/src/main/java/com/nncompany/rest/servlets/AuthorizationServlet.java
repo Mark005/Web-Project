@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/rest/logIn")
-public class AutorizationServlet{
+public class AuthorizationServlet {
     @Autowired
     private IUserCredsService userCredsService;
 

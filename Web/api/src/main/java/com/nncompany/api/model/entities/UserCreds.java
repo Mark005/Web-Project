@@ -21,7 +21,12 @@ public class UserCreds{
     private User user;
 
 
+    public UserCreds(){}
 
+    public UserCreds(String login, String pass){
+        this.login = login;
+        this.pass = pass;
+    }
 
 
     public Integer getId() {

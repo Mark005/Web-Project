@@ -27,7 +27,7 @@ public class UserServlet {
         return ResponseEntity.ok(UserKeeper.getLoggedUser());
     }
 
-    @ApiOperation(value = "Get users with pagination, count elements returned in header 'X-Total-Count' ")
+    @ApiOperation(value = "Get users with pagination")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Users returned successfully", response = ResponseList.class),
             @ApiResponse(code = 400, message = "Invalid request params", response = RequestError.class)

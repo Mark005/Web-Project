@@ -7,16 +7,18 @@ public class ResponseList<T> {
     private List<T> list;
     private Integer total;
 
+    public ResponseList(){}
+
     public ResponseList(List list, Integer total){
         this.list = list;
         this.total = total;
     }
 
-    public List getList() {
+    public List<T> getList() {
         return list;
     }
 
-    public void setList(List list) {
+    public void setList(List<T> list) {
         this.list = list;
     }
 

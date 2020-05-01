@@ -1,17 +1,20 @@
 package com.nncompany.api.model.wrappers;
 
 public class Token {
-    String token;
+
+    private String token;
+
+    public Token(){}
 
     public Token(String tokenBody){
         this.token = tokenBody;
     }
 
-    public String getToken() {
+    public String getValue() {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setValue(String token) {
         this.token = token;
     }
 }

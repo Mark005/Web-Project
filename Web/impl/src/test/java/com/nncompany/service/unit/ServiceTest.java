@@ -1,4 +1,4 @@
-package com.nncompany.test.service;
+package com.nncompany.service.unit;
 
 import com.nncompany.api.interfaces.services.*;
 import com.nncompany.api.model.entities.*;

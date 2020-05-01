@@ -84,18 +84,18 @@ CREATE TABLE IF NOT EXISTS `companyDb`.`task` (
   `type` VARCHAR(45) NOT NULL,
   `status` VARCHAR(45) NOT NULL,
   `deadline` DATE NULL,
-  `creater` INT NOT NULL,
-  `executer` INT NOT NULL,
+  `creator` INT NOT NULL,
+  `executor` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_personal_task_User1_idx` (`creater` ASC) VISIBLE,
-  INDEX `fk_task_User1_idx` (`executer` ASC) VISIBLE,
+  INDEX `fk_personal_task_User1_idx` (`creator` ASC) VISIBLE,
+  INDEX `fk_task_User1_idx` (`executor` ASC) VISIBLE,
   CONSTRAINT `fk_personal_task_User1`
-    FOREIGN KEY (`creater`)
+    FOREIGN KEY (`creator`)
     REFERENCES `companyDb`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_task_User1`
-    FOREIGN KEY (`executer`)
+    FOREIGN KEY (`executor`)
     REFERENCES `companyDb`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -194,18 +194,18 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `companyDb`;
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something one', 'PERSONAL', 'OPEN', '2020-07-15', 1, 2);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something two', 'ELECTRONIC', 'CLOSE', NULL, 1, 3);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something three', 'WELDING', 'EXECUTING', NULL, 1, 4);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something four', 'ADJUSTMENT', 'OPEN', NULL, 1, 5);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something five', 'PERSONAL', 'OPEN', '2020-09-03', 1, 2);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something six', 'ELECTRONIC', 'OPEN', '2020-05-28', 1, 3);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something seven', 'WELDING', 'CLOSE', '2020-03-19', 1, 4);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something eight', 'ADJUSTMENT', 'CLOSE', '2020-02-11', 1, 5);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something nine', 'PERSONAL', 'CLOSE', '2020-03-19', 1, 2);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something ten', 'ELECTRONIC', 'EXECUTING', '2020-05-19', 1, 3);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something eleven', 'WELDING', 'EXECUTING', '2020-06-03', 1, 4);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something twelve', 'ADJUSTMENT', 'EXECUTING', '2020-06-12', 1, 5);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something one', 'PERSONAL', 'OPEN', '2020-07-15', 1, 2);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something two', 'ELECTRONIC', 'CLOSE', NULL, 1, 3);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something three', 'WELDING', 'EXECUTING', NULL, 1, 4);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something four', 'ADJUSTMENT', 'OPEN', NULL, 1, 5);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something five', 'PERSONAL', 'OPEN', '2020-09-03', 1, 2);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something six', 'ELECTRONIC', 'OPEN', '2020-05-28', 1, 3);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something seven', 'WELDING', 'CLOSE', '2020-03-19', 1, 4);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something eight', 'ADJUSTMENT', 'CLOSE', '2020-02-11', 1, 5);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something nine', 'PERSONAL', 'CLOSE', '2020-03-19', 1, 2);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something ten', 'ELECTRONIC', 'EXECUTING', '2020-05-19', 1, 3);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something eleven', 'WELDING', 'EXECUTING', '2020-06-03', 1, 4);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something twelve', 'ADJUSTMENT', 'EXECUTING', '2020-06-12', 1, 5);
 
 COMMIT;
 

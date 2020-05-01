@@ -16,7 +16,12 @@ public class Briefing {
     @Column(name = "interval_in_months")
     private Integer intervalInMonths;
 
+    public Briefing(){}
 
+    public Briefing(String name, Integer intervalInMonths){
+        this.name = name;
+        this.intervalInMonths = intervalInMonths;
+    }
 
 
     public Integer getId() {
