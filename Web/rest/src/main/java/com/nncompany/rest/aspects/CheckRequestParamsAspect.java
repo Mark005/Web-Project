@@ -19,8 +19,8 @@ public class CheckRequestParamsAspect {
     @Pointcut("execution(public * com.nncompany.rest.servlets.ChatServlet.getChatsMessages(..)) && args(page, pageSize, ..)")
     public void chat(Integer page, Integer pageSize) { }
 
-    @Pointcut("execution(public * com.nncompany.rest.servlets.DialogServlet.getDialogWithUser(..)) && args(*, page, pageSize, ..)")
-    public void dialogs(Integer page, Integer pageSize) { }
+    @Pointcut("execution(public * com.nncompany.rest.servlets.DialogServlet.getDialogWithUser(..)) && args(userId, page, pageSize, ..)")
+    public void dialogs(Integer userId, Integer page, Integer pageSize) { }
 
     @Pointcut("execution(public * com.nncompany.rest.servlets.TaskServlet.getAllTasks(..)) && args(page, pageSize, ..)")
     public void tasks(Integer page, Integer pageSize) { }
@@ -34,7 +34,6 @@ public class CheckRequestParamsAspect {
 
     @Around("briefings(page, pageSize) || " +
             "chat(page, pageSize) || " +
-            "dialogs(page, pageSize) ||" +
             "tasks(page, pageSize) ||" +
             "userBriefing(page, pageSize) ||" +
             "users(page, pageSize)")
@@ -48,4 +47,18 @@ public class CheckRequestParamsAspect {
             return joinPoint.proceed();
         }
     }
+
+    @Around("dialogs(userId, page, pageSize)")
+    public Object checkRequestParams(ProceedingJoinPoint joinPoint, Integer userId, Integer page, Integer pageSize) throws Throwable {
+        if(page < 0 || pageSize < 1) {
+            return new ResponseEntity<>(new RequestError(400,
+                    "query params error",
+                    "query params must be: page >= 0 and pageSize > 0"),
+                    HttpStatus.BAD_REQUEST);
+        } else {
+            return joinPoint.proceed();
+        }
+    }
+
+
 }

@@ -169,7 +169,7 @@ public class ServiceTest {
         User user = new User();
             user.setCertificateNumber(1);
             user.setName("aaabbbccc");
-            user.setSurename("rfdg");
+            user.setSurname("rfdg");
             user.setGender(Gender.MALE);
             user.setProfession("chisto lox");
             user.setDateEmployment(new Date());
@@ -207,7 +207,7 @@ public class ServiceTest {
         User user = new User();
             user.setCertificateNumber(1);
             user.setName("aaabbbccc");
-            user.setSurename("rfdg");
+            user.setSurname("rfdg");
             user.setGender(Gender.MALE);
             user.setProfession("chisto lox");
             user.setDateEmployment(new Date());

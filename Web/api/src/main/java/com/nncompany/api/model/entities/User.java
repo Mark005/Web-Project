@@ -32,7 +32,8 @@ public class User {
 
     private Boolean isAdmin;
 
-
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private UserCreds userCreds;
 
     @Override
     public boolean equals(Object obj) {
@@ -62,7 +63,7 @@ public class User {
         return surname;
     }
 
-    public void setSurename(String surname) {
+    public void setSurname(String surname) {
         this.surname = surname;
     }
 

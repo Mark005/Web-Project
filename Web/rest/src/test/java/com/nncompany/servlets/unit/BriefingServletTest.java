@@ -28,13 +28,11 @@ public class BriefingServletTest extends AbstractServletTest{
 
 
     @Before
-    public void loadTestBriefing(){
+    public void loadValues(){
         params.put("page", 0);
         params.put("pageSize", 100);
 
-        testBriefing = new Briefing();
-        testBriefing.setName("test briefing");
-        testBriefing.setIntervalInMonths(2);
+        testBriefing = new Briefing("test briefing", 2);
     }
 
     @Test

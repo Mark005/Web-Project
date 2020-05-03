@@ -1,6 +1,8 @@
 package com.nncompany.servlets.unit;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nncompany.api.model.entities.User;
 import com.nncompany.api.model.entities.UserCreds;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -24,40 +26,37 @@ import static io.restassured.RestAssured.*;
 public abstract class AbstractServletTest {
     protected String ADMIN_TOKEN;
     protected String USER_TOKEN;
+    protected String ANOTHER_USER_TOKEN;
     protected final String ROOT_URL = "http://localhost:8080/rest_war_exploded";
 
     @Before
-    public void init() throws JsonProcessingException {
+    public void init(){
         RestAssured.baseURI = ROOT_URL;
         RestAssured.requestSpecification = new RequestSpecBuilder()
                 .setContentType(ContentType.JSON)
                 .setAccept(ContentType.JSON)
                 .build();
 
-        UserCreds adminCreds = new UserCreds("admin", "admin");
-        UserCreds userCreds = new UserCreds("user", "user");
-
-
-        ADMIN_TOKEN = given()
-                             .body(adminCreds)
-                             .post("/api/rest/logIn")
-                             .jsonPath()
-                                .getString("value");
-
-        USER_TOKEN = given()
-                            .body(userCreds)
-                            .post("/api/rest/logIn")
-                            .jsonPath()
-                                .getString("value");
+        ADMIN_TOKEN =  getToken(new UserCreds("admin", "admin"));
+        USER_TOKEN = getToken(new UserCreds("user", "user"));
+        ANOTHER_USER_TOKEN = getToken(new UserCreds("aaa", "456"));
     }
 
+    protected String getToken(UserCreds userCreds){
+        return  given()
+                        .body(userCreds)
+                        .post("/api/rest/logIn")
+                        .jsonPath()
+                        .getString("value");
+    }
 
-
-    protected Response get(String url, String token, Map params) throws JsonProcessingException {
-        return given()
-                .header("token", token)
-                .queryParams(params)
-                .get(url);
+    protected User getUserByToken(String token) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = given()
+                                .header("token", token)
+                                .get("/api/rest/creds/user")
+                                .asString();
+        return objectMapper.readValue(json, User.class);
     }
 
     protected Response post(String url, Object o) throws JsonProcessingException {

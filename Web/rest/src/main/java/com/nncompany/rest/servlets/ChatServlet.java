@@ -123,8 +123,8 @@ public class ChatServlet {
                                                         "message with current id is deleted or not created"),
                                                         HttpStatus.NOT_FOUND);
         }
-        if(dbMessage.getUserFrom().equals(UserKeeper.getLoggedUser()) &&
-           dbMessage.getUserTo() == null) {
+        if(!dbMessage.getUserFrom().equals(UserKeeper.getLoggedUser()) &&
+           dbMessage.getUserTo() != null) {
             return new ResponseEntity<>(new RequestError(403,
                                                         "access denied for this message",
                                                         "message with current id not from common chat"),

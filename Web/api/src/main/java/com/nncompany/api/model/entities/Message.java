@@ -24,7 +24,14 @@ public class Message {
     @JoinColumn(name = "user_to")
     private User userTo;
 
+    public Message(){}
 
+    public Message(String text, User userFrom, User userTo){
+        this.text = text;
+        this.userFrom = userFrom;
+        this.userTo = userTo;
+        this.date = new Date();
+    }
 
     public Integer getId() {
         return id;
