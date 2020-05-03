@@ -1,6 +1,6 @@
 package com.nncompany.api.model.entities;
 
-import com.nncompany.api.model.enums.TaskSatus;
+import com.nncompany.api.model.enums.TaskStatus;
 import com.nncompany.api.model.enums.TaskType;
 
 import javax.persistence.*;
@@ -23,7 +23,7 @@ public class Task {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private TaskSatus status;
+    private TaskStatus status;
 
     private Date deadline;
 
@@ -63,12 +63,12 @@ public class Task {
         this.type = type;
     }
 
-    public TaskSatus getSatus() {
+    public TaskStatus getStatus() {
         return status;
     }
 
-    public void setSatus(TaskSatus satus) {
-        this.status = satus;
+    public void setSatus(TaskStatus status) {
+        this.status = status;
     }
 
     public Date getDeadline() {

@@ -3,7 +3,7 @@ package com.nncompany.service.unit;
 import com.nncompany.api.interfaces.services.*;
 import com.nncompany.api.model.entities.*;
 import com.nncompany.api.model.enums.Gender;
-import com.nncompany.api.model.enums.TaskSatus;
+import com.nncompany.api.model.enums.TaskStatus;
 import com.nncompany.api.model.enums.TaskType;
 import org.junit.Assert;
 import org.junit.Test;
@@ -101,7 +101,7 @@ public class ServiceTest {
         task.setType(TaskType.PERSONAL);
         task.setCreator(userOne);
         task.setExecutor(userTwo);
-        task.setSatus(TaskSatus.OPEN);
+        task.setSatus(TaskStatus.OPEN);
         task.setDeadline(new Date());
 
         taskService.save(task);
@@ -115,12 +115,12 @@ public class ServiceTest {
         taskService.delete(task);
         Assert.assertNull(taskService.get(task.getId()));
 
-        Integer getAllSize = taskService.getAll(0,999999,TaskSatus.OPEN, TaskType.PERSONAL).size();
-        Integer getAllCount = taskService.getTotalCountForGetAll(TaskSatus.OPEN, TaskType.PERSONAL);
+        Integer getAllSize = taskService.getAll(0,999999,TaskStatus.OPEN, TaskType.PERSONAL).size();
+        Integer getAllCount = taskService.getTotalCountForGetAll(TaskStatus.OPEN, TaskType.PERSONAL);
         Assert.assertTrue(getAllSize  == getAllCount);
 
-        Integer getUsersTasksSize = taskService.getUsersTasks(userOne, TaskSatus.OPEN, TaskType.PERSONAL).size();
-        Integer getUsersTasksCount = taskService.getTotalCountForGetUsersTasks(userOne, TaskSatus.OPEN, TaskType.PERSONAL);
+        Integer getUsersTasksSize = taskService.getUsersTasks(userOne, TaskStatus.OPEN, TaskType.PERSONAL).size();
+        Integer getUsersTasksCount = taskService.getTotalCountForGetUsersTasks(userOne, TaskStatus.OPEN, TaskType.PERSONAL);
         Assert.assertTrue(getUsersTasksSize  == getUsersTasksCount);
 
         taskService.delete(task);

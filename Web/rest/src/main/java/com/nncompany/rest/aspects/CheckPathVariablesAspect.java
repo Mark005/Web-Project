@@ -29,7 +29,8 @@ public class CheckPathVariablesAspect {
     public void dialog(Integer userId) { }
 
     @Pointcut("execution(public * com.nncompany.rest.servlets.TaskServlet.changeTask(..)) && args(id, ..) ||" +
-              "execution(public * com.nncompany.rest.servlets.TaskServlet.deleteTask(..)) && args(id, ..)")
+              "execution(public * com.nncompany.rest.servlets.TaskServlet.deleteTask(..)) && args(id, ..) ||" +
+              "execution(public * com.nncompany.rest.servlets.TaskServlet.getTask(..)) && args(id, ..)")
     public void tasks(Integer id) { }
 
     @Pointcut("execution(public * com.nncompany.rest.servlets.UserBriefingServlet.getBriefingsByCurrentUser(..)) && args(id, ..) ||" +

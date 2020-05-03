@@ -3,7 +3,7 @@ package com.nncompany.rest.servlets;
 import com.nncompany.api.interfaces.services.ITaskService;
 import com.nncompany.api.model.entities.Task;
 import com.nncompany.api.model.entities.User;
-import com.nncompany.api.model.enums.TaskSatus;
+import com.nncompany.api.model.enums.TaskStatus;
 import com.nncompany.api.model.enums.TaskType;
 import com.nncompany.api.model.wrappers.RequestError;
 import com.nncompany.api.model.wrappers.ResponseList;
@@ -34,7 +34,7 @@ public class TaskServlet {
     public ResponseEntity<Object> getAllTasks(@RequestParam Integer page,
                                               @RequestParam Integer pageSize,
                                               @RequestParam TaskType type,
-                                              @RequestParam TaskSatus status){
+                                              @RequestParam TaskStatus status){
         User loggUser = UserKeeper.getLoggedUser();
         ResponseList responseList;
         if(loggUser.isAdmin() || (!loggUser.isAdmin() && !type.equals(TaskType.PERSONAL))){
@@ -47,6 +47,33 @@ public class TaskServlet {
         return ResponseEntity.ok(responseList);
     }
 
+    @ApiOperation(value = "Get task by id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Task received successfully", response = Task.class),
+            @ApiResponse(code = 400, message = "Invalid path variable", response = RequestError.class),
+            @ApiResponse(code = 403, message = "Current task is personal task another user's", response = RequestError.class),
+            @ApiResponse(code = 404, message = "Current task not found", response = RequestError.class),
+    })
+    @GetMapping("/tasks/{id}")
+    public ResponseEntity<Object> getTask(@PathVariable Integer id){
+        User loggUser = UserKeeper.getLoggedUser();
+        Task task = taskService.get(id);
+        if(task == null){
+            return new ResponseEntity<>(new RequestError(404,
+                                                        "not found",
+                                                        "current task deleted or not created"),
+                                                        HttpStatus.NOT_FOUND);
+        }
+        if(!loggUser.isAdmin() && task.getType().equals(TaskType.PERSONAL) && !task.getExecutor().equals(loggUser)){
+            return new ResponseEntity<>(new RequestError(403,
+                                                        "you have't access to this task",
+                                                        "current task is personal task another user's"),
+                                                        HttpStatus.FORBIDDEN);
+        } else {
+            return ResponseEntity.ok(task);
+        }
+    }
+
 
     @ApiOperation(value = "Add new task")
     @ApiResponses(value = {
@@ -57,7 +84,7 @@ public class TaskServlet {
     @PostMapping("/tasks")
     public ResponseEntity addTask(@RequestBody Task task){
         task.setCreator(UserKeeper.getLoggedUser());
-        task.setSatus(TaskSatus.OPEN);
+        task.setSatus(TaskStatus.OPEN);
         taskService.save(task);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -79,7 +106,7 @@ public class TaskServlet {
                                                         "task deleted or not created"),
                                                         HttpStatus.NOT_FOUND);
         }
-        dbTask.setSatus(task.getSatus());
+        dbTask.setSatus(task.getStatus());
         taskService.update(dbTask);
         return new ResponseEntity<>(HttpStatus.OK);
     }

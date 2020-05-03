@@ -41,6 +41,9 @@ INSERT INTO `task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `exec
 INSERT INTO `task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something ten', 'ELECTRONIC', 'EXECUTING', '2020-05-19', 1, 3);
 INSERT INTO `task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something eleven', 'WELDING', 'EXECUTING', '2020-06-03', 1, 4);
 INSERT INTO `task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something twelve', 'ADJUSTMENT', 'EXECUTING', '2020-06-12', 1, 5);
+INSERT INTO `task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something thirteen', 'WELDING', 'OPEN', '2020-03-19', 1, 2);
+INSERT INTO `task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something fourteen', 'PERSONAL', 'EXECUTING', '2020-05-19', 1, 3);
+
 
 INSERT INTO `message` (`id`, `text`, `date`, `user_from`, `User_to`) VALUES (DEFAULT, 'hi', '2020-03-20 20:20:20', 1, 4);
 INSERT INTO `message` (`id`, `text`, `date`, `user_from`, `User_to`) VALUES (DEFAULT, 'hi', '2020-03-20 20:21:00', 4, 1);

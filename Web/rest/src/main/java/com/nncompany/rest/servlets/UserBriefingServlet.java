@@ -72,7 +72,7 @@ public class UserBriefingServlet {
 
     @ApiOperation(value = "Get all conducted briefings with sorting")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Users received successfully", response = Briefing[].class),
+            @ApiResponse(code = 200, message = "Users received successfully", response = ResponseList.class),
             @ApiResponse(code = 400, message = "Invalid request params", response = RequestError.class),
     })
     @GetMapping("/briefings")
@@ -87,7 +87,10 @@ public class UserBriefingServlet {
                                                                    "for more info check available params"),
                                                         HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok(userBriefingService.getAll(page, pageSize, sort, direction));
+        ResponseList<UserBriefing> responseList = new ResponseList<>();
+        responseList.setList(userBriefingService.getAll(page, pageSize, sort, direction));
+        responseList.setTotal(userBriefingService.getTotalCount());
+        return ResponseEntity.ok(responseList);
     }
 
 

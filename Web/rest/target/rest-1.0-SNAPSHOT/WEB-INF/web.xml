@@ -9,8 +9,6 @@
         <param-value>test</param-value>
     </context-param>
 
-
-
     <display-name>restServlet</display-name>
 
     <listener>

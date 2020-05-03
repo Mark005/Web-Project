@@ -10,6 +10,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.Before;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -18,6 +19,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.util.Map;
 
 import static io.restassured.RestAssured.*;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:web-application-context-test.xml",
@@ -36,10 +38,16 @@ public abstract class AbstractServletTest {
                 .setContentType(ContentType.JSON)
                 .setAccept(ContentType.JSON)
                 .build();
-
         ADMIN_TOKEN =  getToken(new UserCreds("admin", "admin"));
         USER_TOKEN = getToken(new UserCreds("user", "user"));
         ANOTHER_USER_TOKEN = getToken(new UserCreds("aaa", "456"));
+    }
+
+    @Test
+    public void autorizationTest(){
+        assertNotNull(ADMIN_TOKEN);
+        assertNotNull(USER_TOKEN);
+        assertNotNull(ANOTHER_USER_TOKEN);
     }
 
     protected String getToken(UserCreds userCreds){
@@ -57,19 +65,5 @@ public abstract class AbstractServletTest {
                                 .get("/api/rest/creds/user")
                                 .asString();
         return objectMapper.readValue(json, User.class);
-    }
-
-    protected Response post(String url, Object o) throws JsonProcessingException {
-        return given()
-                .contentType(ContentType.JSON)
-                .body(o)
-                .post(url);
-    }
-
-    protected Response post(String url, String token, Map params) throws JsonProcessingException {
-        return given()
-                .header("token", token)
-                .queryParams(params)
-                .get(url);
     }
 }

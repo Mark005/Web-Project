@@ -4,7 +4,7 @@ import com.nncompany.api.interfaces.services.ITaskService;
 import com.nncompany.api.interfaces.stors.ITaskStore;
 import com.nncompany.api.model.entities.Task;
 import com.nncompany.api.model.entities.User;
-import com.nncompany.api.model.enums.TaskSatus;
+import com.nncompany.api.model.enums.TaskStatus;
 import com.nncompany.api.model.enums.TaskType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,23 +35,23 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public List<Task> getUsersTasks(User user, TaskSatus taskSatus, TaskType taskType) {
-        return taskStore.getUsersTasks(user, taskSatus, taskType);
+    public List<Task> getUsersTasks(User user, TaskStatus taskStatus, TaskType taskType) {
+        return taskStore.getUsersTasks(user, taskStatus, taskType);
     }
 
     @Override
-    public Integer getTotalCountForGetUsersTasks(User user, TaskSatus taskSatus, TaskType taskType) {
-        return taskStore.getTotalCountForGetUsersTasks(user, taskSatus, taskType);
+    public Integer getTotalCountForGetUsersTasks(User user, TaskStatus taskStatus, TaskType taskType) {
+        return taskStore.getTotalCountForGetUsersTasks(user, taskStatus, taskType);
     }
 
     @Override
-    public List<Task> getAll(Integer page, Integer pageSize,TaskSatus taskSatus, TaskType taskType) {
-        return taskStore.getAll(page, pageSize, taskSatus, taskType);
+    public List<Task> getAll(Integer page, Integer pageSize,TaskStatus taskStatus, TaskType taskType) {
+        return taskStore.getAll(page, pageSize, taskStatus, taskType);
     }
 
     @Override
-    public Integer getTotalCountForGetAll(TaskSatus taskSatus, TaskType taskType) {
-        return taskStore.getTotalCountForGetAll(taskSatus, taskType);
+    public Integer getTotalCountForGetAll(TaskStatus taskStatus, TaskType taskType) {
+        return taskStore.getTotalCountForGetAll(taskStatus, taskType);
     }
 
     @Override
