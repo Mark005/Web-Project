@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.*;
@@ -30,6 +31,7 @@ public abstract class AbstractServletTest {
     protected String USER_TOKEN;
     protected String ANOTHER_USER_TOKEN;
     protected final String ROOT_URL = "http://localhost:8080/rest_war_exploded";
+    protected Map<String, Integer> PAGINATION_PARAMS = new HashMap<>();
 
     @Before
     public void init(){
@@ -41,6 +43,8 @@ public abstract class AbstractServletTest {
         ADMIN_TOKEN =  getToken(new UserCreds("admin", "admin"));
         USER_TOKEN = getToken(new UserCreds("user", "user"));
         ANOTHER_USER_TOKEN = getToken(new UserCreds("aaa", "456"));
+        PAGINATION_PARAMS.put("page", 0);
+        PAGINATION_PARAMS.put("pageSize", 100);
     }
 
     @Test

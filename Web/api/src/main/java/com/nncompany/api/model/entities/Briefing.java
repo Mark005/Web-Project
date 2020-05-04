@@ -23,6 +23,12 @@ public class Briefing {
         this.intervalInMonths = intervalInMonths;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        Briefing m = (Briefing) obj;
+        return this.id.equals(m.getId());
+    }
+
 
     public Integer getId() {
         return id;

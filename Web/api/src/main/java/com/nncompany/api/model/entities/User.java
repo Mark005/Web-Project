@@ -103,7 +103,7 @@ public class User {
         return isAdmin;
     }
 
-    public void setAdmin(Boolean isadmin) {
-        this.isAdmin = isadmin;
+    public void setAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }

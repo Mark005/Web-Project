@@ -24,21 +24,17 @@ import static org.junit.Assert.*;
 public class BriefingServletTest extends AbstractServletTest{
     private Briefing testBriefing;
     private ObjectMapper objectMapper = new ObjectMapper();
-    private Map<String, Integer> params = new HashMap<>();
 
 
     @Before
     public void loadValues(){
-        params.put("page", 0);
-        params.put("pageSize", 100);
-
         testBriefing = new Briefing("test briefing", 2);
     }
 
     @Test
     public void A_getBriefings() throws IOException {
         Response response = given() .header("token", USER_TOKEN)
-                                    .queryParams(params)
+                                    .queryParams(PAGINATION_PARAMS)
                                     .get("/api/rest/creds/briefings");
         ResponseList<Briefing> responseList = objectMapper.readValue(response.getBody().asString(), ResponseList.class);
 
@@ -62,7 +58,7 @@ public class BriefingServletTest extends AbstractServletTest{
         assertTrue(++totalCount == getTotalCount().intValue());
 
         response = given() .header("token", USER_TOKEN)
-                            .queryParams(params)
+                            .queryParams(PAGINATION_PARAMS)
                             .get("/api/rest/creds/briefings");
         String json =  response.getBody().asString();
         ResponseList<Briefing> responseList = objectMapper.readValue(json, new TypeReference<ResponseList<Briefing>>() {});
@@ -85,7 +81,7 @@ public class BriefingServletTest extends AbstractServletTest{
         assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
 
         response = given() .header("token", USER_TOKEN)
-                .queryParams(params)
+                .queryParams(PAGINATION_PARAMS)
                 .get("/api/rest/creds/briefings");
         String json = response.getBody().asString();
         ResponseList<Briefing> responseList = objectMapper.readValue(json, new TypeReference<ResponseList<Briefing>>() {});
@@ -109,7 +105,7 @@ public class BriefingServletTest extends AbstractServletTest{
         assertTrue(--totalCount == getTotalCount().intValue());
 
         response = given() .header("token", USER_TOKEN)
-                .queryParams(params)
+                .queryParams(PAGINATION_PARAMS)
                 .get("/api/rest/creds/briefings");
         String json = response.getBody().asString();
         ResponseList<Briefing> responseList = objectMapper.readValue(json, new TypeReference<ResponseList<Briefing>>() {});
@@ -120,7 +116,7 @@ public class BriefingServletTest extends AbstractServletTest{
     }
     private Integer getTotalCount(){
         String total = given() .header("token", USER_TOKEN)
-                                .queryParams(params)
+                                .queryParams(PAGINATION_PARAMS)
                                 .get("/api/rest/creds/briefings")
                                 .jsonPath().getString("total");
         return Integer.parseInt(total);
@@ -128,7 +124,7 @@ public class BriefingServletTest extends AbstractServletTest{
 
     private Integer getLastId() throws JsonProcessingException {
         String json = given() .header("token", USER_TOKEN)
-                                .queryParams(params)
+                                .queryParams(PAGINATION_PARAMS)
                                 .get("/api/rest/creds/briefings")
                                 .asString();
         ResponseList<Briefing> responseList = objectMapper.readValue(json, new TypeReference<ResponseList<Briefing>>() {});

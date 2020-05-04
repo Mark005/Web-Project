@@ -36,7 +36,8 @@ public class CheckPathVariablesAspect {
     @Pointcut("execution(public * com.nncompany.rest.servlets.UserBriefingServlet.getBriefingsByCurrentUser(..)) && args(id, ..) ||" +
               "execution(public * com.nncompany.rest.servlets.UserBriefingServlet.getUsersByCurrentBriefing(..)) && args(id, ..) ||" +
               "execution(public * com.nncompany.rest.servlets.UserBriefingServlet.updateConductionDate(..)) && args(id, ..) ||" +
-              "execution(public * com.nncompany.rest.servlets.UserBriefingServlet.deleteConductedBriefing(..)) && args(id, ..)")
+              "execution(public * com.nncompany.rest.servlets.UserBriefingServlet.deleteConductedBriefing(..)) && args(id, ..) ||" +
+              "execution(public * com.nncompany.rest.servlets.UserBriefingServlet.getById(..)) && args(id, ..)")
     public void userBriefing(Integer id) { }
 
     @Pointcut("execution(public * com.nncompany.rest.servlets.UserServlet.getUserById(..)) && args(id, ..) ||" +
