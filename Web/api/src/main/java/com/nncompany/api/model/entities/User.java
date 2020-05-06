@@ -1,12 +1,17 @@
 package com.nncompany.api.model.entities;
 
 import com.nncompany.api.model.enums.Gender;
+import org.apache.lucene.analysis.core.KeywordAnalyzer;
+import org.hibernate.search.annotations.*;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.bridge.builtin.IntegerBridge;
 
 import javax.persistence.*;
 import java.util.Date;
 
 
 @Entity
+@Indexed
 @Table(name = "user")
 public class User {
 
@@ -18,8 +23,12 @@ public class User {
     @Column(name = "certificate_number")
     private Integer certificateNumber;
 
+    @Field(termVector = TermVector.YES)
+    @Analyzer(impl = KeywordAnalyzer.class)
     private String name;
 
+    @Field(termVector = TermVector.YES)
+    @Analyzer(impl = KeywordAnalyzer.class)
     private String surname;
 
     @Enumerated(EnumType.STRING)

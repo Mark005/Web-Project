@@ -25,16 +25,13 @@ import static org.junit.Assert.assertEquals;
 public class ChatServletTest extends AbstractServletTest{
     private User user;
     private Message testMessage;
-    private Map<String,Integer> params;
     private final String MESSAGE_TEXT = "tytyhrJKHNjnjnjNUNJn";
     private final String NEW_MESSAGE_TEXT = "pe_lkm5b-MK0bthm";
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Before
     public void loadValues() throws JsonProcessingException {
-        params = new HashMap<>();
-            params.put("page", 0);
-            params.put("pageSize", 100);
+
         user = getUserByToken(USER_TOKEN);
         testMessage = new Message(MESSAGE_TEXT, user, null);
     }
@@ -102,7 +99,7 @@ public class ChatServletTest extends AbstractServletTest{
     private ResponseList<Message> getMessages() throws JsonProcessingException {
         Response response = given()
                 .header("token", USER_TOKEN)
-                .queryParams(params)
+                .queryParams(PAGINATION_PARAMS)
                 .get("/api/rest/creds/chat");
         assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         String json = response.asString();

@@ -37,6 +37,15 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public List<User> search(String searchString) {
+        try {
+            return userStore.search(Integer.parseInt(searchString));
+        } catch (Exception e){
+            return userStore.search(searchString);
+        }
+    }
+
+    @Override
     public void save(User user) {
         userStore.save(user);
     }

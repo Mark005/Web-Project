@@ -25,17 +25,12 @@ public class DialodServletTest extends AbstractServletTest {
     private User userOne;
     private User userTwo;
     private Message testMessage;
-    private Map<String,Integer> params;
     private final String MESSAGE_TEXT = "tytyhrJKHNjnjnjNUNJn";
     private final String NEW_MESSAGE_TEXT = "pe_lkm5b-MK0bthm";
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Before
     public void loadValues() throws JsonProcessingException {
-        params = new HashMap<>();
-        params.put("page", 0);
-        params.put("pageSize", 100);
-
         userOne = getUserByToken(USER_TOKEN);
         userTwo = getUserByToken(ANOTHER_USER_TOKEN);
 
@@ -108,7 +103,7 @@ public class DialodServletTest extends AbstractServletTest {
     private ResponseList<Message> getMessages() throws JsonProcessingException {
         Response response = given()
                                     .header("token", USER_TOKEN)
-                                    .queryParams(params)
+                                    .queryParams(PAGINATION_PARAMS)
                                     .get("/api/rest/creds/dialog/" + userTwo.getId());
         assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         String json = response.asString();

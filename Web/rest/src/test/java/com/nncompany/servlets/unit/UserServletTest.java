@@ -20,6 +20,7 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsIterableContaining.hasItem;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -29,16 +30,12 @@ public class UserServletTest extends AbstractServletTest{
     private Response response;
     private UserCreds testUserCreds;
     private User testUser;
-    private Integer testUserId;
-    private String testUserToken;
-    private Map<String, Integer> params;
+    private static Integer testUserId;
+    private static String testUserToken;
 
     @Before
     public void loadValues(){
         objectMapper = new ObjectMapper();
-        params = new HashMap<>();
-            params.put("page", 0);
-            params.put("pageSize", 100);
         testUser = new User();
             testUser.setName("New");
             testUser.setSurname("User");
@@ -54,7 +51,7 @@ public class UserServletTest extends AbstractServletTest{
     }
 
     @Test
-    public void A_addUser(){
+    public void A_addUser() {
         given()
                 .body(testUserCreds)
                 .post("/api/rest/registration/user")
@@ -62,7 +59,7 @@ public class UserServletTest extends AbstractServletTest{
     }
 
     @Test
-    public void B_getLoggedUser(){
+    public void B_getLoggedUser() {
         testUserToken = getToken(testUserCreds);
         given()
                 .header("token", testUserToken)
@@ -78,7 +75,7 @@ public class UserServletTest extends AbstractServletTest{
         testUserToken = getToken(testUserCreds);
         response = given()
                 .header("token", testUserToken)
-                .queryParams(params)
+                .queryParams(PAGINATION_PARAMS)
                 .get("/api/rest/creds/users");
         assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         String json = response.asString();
@@ -87,7 +84,7 @@ public class UserServletTest extends AbstractServletTest{
     }
 
     @Test
-    public void D_getUser() throws JsonProcessingException {
+    public void D_getUser() {
         testUserToken = getToken(testUserCreds);
         testUserId = given()
                 .header("token", testUserToken)
@@ -103,13 +100,32 @@ public class UserServletTest extends AbstractServletTest{
     }
 
     @Test
-    public void E_updateUser(){
-        testUserToken = getToken(testUserCreds);
-        testUserId = given()
+    public void D_findUsers() {
+        given()
                 .header("token", testUserToken)
-                .get("/api/rest/creds/user")
-                .jsonPath().getInt("id");
+                .queryParams(PAGINATION_PARAMS)
+                .queryParam("searchString", testUser.getName() + " " + testUser.getSurname())
+                .get("/api/rest/creds/users/search")
+                .then().assertThat()
+                .body("total", equalTo(1))
+                .body("list.name", hasItem(testUser.getName()))
+                .body("list.surname", hasItem(testUser.getSurname()))
+                .body("list.certificateNumber", hasItem(testUser.getCertificateNumber()));
 
+        given()
+                .header("token", testUserToken)
+                .queryParams(PAGINATION_PARAMS)
+                .queryParam("searchString", testUser.getCertificateNumber())
+                .get("/api/rest/creds/users/search")
+                .then().assertThat()
+                .body("total", equalTo(1))
+                .body("list.name", hasItem(testUser.getName()))
+                .body("list.surname", hasItem(testUser.getSurname()))
+                .body("list.certificateNumber", hasItem(testUser.getCertificateNumber()));
+    }
+
+    @Test
+    public void E_updateUser(){
         testUser.setName("a5_e5jkl135ekg");
         given()
                 .header("token", USER_TOKEN)
@@ -138,12 +154,6 @@ public class UserServletTest extends AbstractServletTest{
 
     @Test
     public void F_deleteUser(){
-        testUserToken = getToken(testUserCreds);
-        testUserId = given()
-                .header("token", testUserToken)
-                .get("/api/rest/creds/user")
-                .jsonPath().getInt("id");
-
         given()
                 .header("token", USER_TOKEN)
                 .delete("/api/rest/creds/users/"+ testUserId)

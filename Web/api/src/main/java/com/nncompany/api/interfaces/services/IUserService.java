@@ -14,6 +14,8 @@ public interface IUserService {
 
     Integer getTotalCount();
 
+    List<User> search(String nameOrAndSurname);
+
     void save(User user);
 
     void update(User user);

@@ -29,7 +29,6 @@ public class TaskServletTest extends AbstractServletTest {
     private User user;
     private static Integer taskId;
     private Task task;
-    private Map<String,Integer> params;
     private final String NAME = "NlhjHJbhlHbhHBHhbyonhvt";
     private final TaskType TYPE = TaskType.PERSONAL;
     private final TaskStatus STATUS = TaskStatus.OPEN;
@@ -38,9 +37,6 @@ public class TaskServletTest extends AbstractServletTest {
 
     @Before
     public void loadValues() throws JsonProcessingException {
-        params = new HashMap<>();
-            params.put("page", 0);
-            params.put("pageSize", 100);
         admin = getUserByToken(ADMIN_TOKEN);
         user = getUserByToken(USER_TOKEN);
 
@@ -66,7 +62,7 @@ public class TaskServletTest extends AbstractServletTest {
     public void B_getTasks() throws JsonProcessingException {
         Response response = given()
                                     .header("token", ADMIN_TOKEN)
-                                    .queryParams(params)
+                                    .queryParams(PAGINATION_PARAMS)
                                     .queryParam("status", STATUS)
                                     .queryParam("type", TYPE)
                                     .get("/api/rest/creds/tasks");
@@ -139,7 +135,7 @@ public class TaskServletTest extends AbstractServletTest {
     private Task getTaskByTypeAndStatus(TaskType type, TaskStatus status) throws JsonProcessingException {
         Response response = given()
                                     .header("token", ADMIN_TOKEN)
-                                    .queryParams(params)
+                                    .queryParams(PAGINATION_PARAMS)
                                     .queryParam("type", type)
                                     .queryParam("status", status)
                                     .get("/api/rest/creds/tasks");

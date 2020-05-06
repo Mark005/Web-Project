@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/rest/creds")
 public class UserServlet {
@@ -56,6 +58,33 @@ public class UserServlet {
         }
         return ResponseEntity.ok(user);
     }
+
+    @ApiOperation(value = "Get user by (name/surname/certificate number)")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Users returned successfully", response = ResponseList.class),
+            @ApiResponse(code = 400, message = "Invalid request params", response = RequestError.class),
+            @ApiResponse(code = 404, message = "Users with this criteria not found", response = RequestError.class)
+    })
+    @GetMapping("/users/search")
+    public ResponseEntity<Object> findUsers(@RequestParam Integer page,
+                                            @RequestParam Integer pageSize,
+                                            @RequestParam String searchString){
+        List<User> users = userService.search(searchString);
+        if(users == null || users.size() == 0) {
+            return new ResponseEntity<>(new RequestError(404,
+                                                        "users not found",
+                                                        "users with this criteria not found"),
+                                                        HttpStatus.NOT_FOUND);
+        }
+        ResponseList<User> responseList = new ResponseList();
+        Integer firstItem = page*pageSize;
+        Integer lastItem = page*pageSize+pageSize;
+        responseList.setList(users.subList(firstItem > users.size() ? users.size() : firstItem,
+                                           lastItem  > users.size() ? users.size() : lastItem));
+        responseList.setTotal(users.size());
+        return ResponseEntity.ok(responseList);
+    }
+
 
 
     @ApiOperation(value = "Update user by id except admin status " +

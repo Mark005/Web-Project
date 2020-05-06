@@ -5,6 +5,7 @@
 		http://www.springframework.org/schema/beans
     	http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+
     <beans profile="test">
         <import resource="classpath:web-application-context-test.xml" />
     </beans>

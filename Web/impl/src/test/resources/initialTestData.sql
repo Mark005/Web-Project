@@ -47,7 +47,7 @@ INSERT INTO `task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `exec
 
 INSERT INTO `message` (`id`, `text`, `date`, `user_from`, `User_to`) VALUES (DEFAULT, 'hi', '2020-03-20 20:20:20', 1, 4);
 INSERT INTO `message` (`id`, `text`, `date`, `user_from`, `User_to`) VALUES (DEFAULT, 'hi', '2020-03-20 20:21:00', 4, 1);
-INSERT INTO `message` (`id`, `text`, `date`, `user_from`, `User_to`) VALUES (DEFAULT, 'what\'s up?', '2020-03-20 20:22:00', 1, 4);
+INSERT INTO `message` (`id`, `text`, `date`, `user_from`, `User_to`) VALUES (DEFAULT, 'what''s up?', '2020-03-20 20:22:00', 1, 4);
 INSERT INTO `message` (`id`, `text`, `date`, `user_from`, `User_to`) VALUES (DEFAULT, 'nice', '2020-03-20 20:23:00', 4, 1);
 INSERT INTO `message` (`text`, `date`, `user_from`) VALUES ('common', '2020-02-21 20:23:00', '2');
 INSERT INTO `message` (`text`, `date`, `user_from`) VALUES ('chat', '2020-02-21 20:24:00', '3');

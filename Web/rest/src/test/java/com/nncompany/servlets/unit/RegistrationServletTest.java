@@ -24,13 +24,9 @@ public class RegistrationServletTest extends AbstractServletTest {
     private User testUser;
     private Integer testUserId;
     private String testUserToken;
-    private Map<String, Integer> params;
 
     @Before
     public void loadValues(){
-        params = new HashMap<>();
-            params.put("page", 0);
-            params.put("pageSize", 100);
         testUser = new User();
             testUser.setName("New");
             testUser.setSurname("User");

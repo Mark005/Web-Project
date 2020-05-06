@@ -28,7 +28,8 @@ public class CheckRequestParamsAspect {
     @Pointcut("execution(public * com.nncompany.rest.servlets.UserBriefingServlet.getAll(..)) && args(page, pageSize, ..)")
     public void userBriefing(Integer page, Integer pageSize) { }
 
-    @Pointcut("execution(public * com.nncompany.rest.servlets.UserServlet.getUsers(..)) && args(page, pageSize, ..)")
+    @Pointcut("execution(public * com.nncompany.rest.servlets.UserServlet.getUsers(..)) && args(page, pageSize, ..) ||" +
+              "execution(public * com.nncompany.rest.servlets.UserServlet.findUsers(..)) && args(page, pageSize, ..)")
     public void users(Integer page, Integer pageSize) { }
 
 
