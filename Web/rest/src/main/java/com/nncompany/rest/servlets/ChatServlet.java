@@ -67,7 +67,7 @@ public class ChatServlet {
 
     @ApiOperation(value = "Send message to common chat")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Message sent successfully"),
+            @ApiResponse(code = 201, message = "Message sent successfully", response = Message.class),
             @ApiResponse(code = 400, message = "Invalid message json, for more info check models")
     })
     @PostMapping("/chat")
@@ -75,14 +75,14 @@ public class ChatServlet {
         message.setUserFrom(UserKeeper.getLoggedUser());
         message.setDate(new Date());
         messageService.save(message);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Change chat's message text")
+    @ApiOperation(value = "Change chat's message text(Attention: user can change only his message and only message's text)")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Message changed successfully"),
-            @ApiResponse(code = 400, message = "Invalid message json(check models), or path variable(must be > 0)", response = RequestError.class),
-            @ApiResponse(code = 403, message = "Message with current id from private dialog", response = RequestError.class),
+            @ApiResponse(code = 200, message = "Message changed successfully", response = Message.class),
+            @ApiResponse(code = 400, message = "Invalid message json(check models), or path variable", response = RequestError.class),
+            @ApiResponse(code = 403, message = "Message with current id from private dialog, or you are not creator this message", response = RequestError.class),
             @ApiResponse(code = 404, message = "Message not found", response = RequestError.class)
     })
     @PatchMapping("/chat/{msgId}")
@@ -95,7 +95,7 @@ public class ChatServlet {
                                                         "message with current id is deleted or not created"),
                                                         HttpStatus.NOT_FOUND);
         }
-        if(!dbMessage.getUserFrom().equals(UserKeeper.getLoggedUser()) &&
+        if(!dbMessage.getUserFrom().equals(UserKeeper.getLoggedUser()) ||
             dbMessage.getUserTo() != null) {
             return new ResponseEntity<>(new RequestError(403,
                                                         "access denied for this message",
@@ -104,14 +104,14 @@ public class ChatServlet {
         }
         dbMessage.setText(message.getText());
         messageService.update(dbMessage);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(dbMessage, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Delete chat's message text")
+    @ApiOperation(value = "Delete chat's message text(Attention: user can delete only his message)")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Message deleted successfully"),
-            @ApiResponse(code = 400, message = "Invalid message json(check models), or path variable(must be > 0)", response = RequestError.class),
-            @ApiResponse(code = 403, message = "Message with current id from private dialog", response = RequestError.class),
+            @ApiResponse(code = 400, message = "Invalid message json(check models), or path variable", response = RequestError.class),
+            @ApiResponse(code = 403, message = "Message with current id from private dialog, or you are not creator this message", response = RequestError.class),
             @ApiResponse(code = 404, message = "Message not found", response = RequestError.class)
     })
     @DeleteMapping("/chat/{msgId}")
@@ -123,7 +123,7 @@ public class ChatServlet {
                                                         "message with current id is deleted or not created"),
                                                         HttpStatus.NOT_FOUND);
         }
-        if(!dbMessage.getUserFrom().equals(UserKeeper.getLoggedUser()) &&
+        if(!dbMessage.getUserFrom().equals(UserKeeper.getLoggedUser()) ||
            dbMessage.getUserTo() != null) {
             return new ResponseEntity<>(new RequestError(403,
                                                         "access denied for this message",

@@ -89,7 +89,7 @@ public class DialogServlet {
 
     @ApiOperation(value = "Send message to user by 'userId'")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Message sent successfully"),
+            @ApiResponse(code = 201, message = "Message sent successfully", response = Message.class),
             @ApiResponse(code = 400, message = "Invalid path variable", response = RequestError.class),
             @ApiResponse(code = 404, message = "Target user not found", response = RequestError.class),
     })
@@ -107,14 +107,14 @@ public class DialogServlet {
         message.setUserTo(userTo);
         message.setDate(new Date());
         messageService.save(message);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Change message's text by message id from dialog with user")
+    @ApiOperation(value = "Change message's text by message id from dialog with user(Attention: user can change only his message and only message's text)")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Message text changed successfully"),
+            @ApiResponse(code = 200, message = "Message text changed successfully", response = Message.class),
             @ApiResponse(code = 400, message = "Invalid path variable", response = RequestError.class),
-            @ApiResponse(code = 403, message = "Current message from another dialog", response = RequestError.class),
+            @ApiResponse(code = 403, message = "Current message from another dialog, or you are not creator", response = RequestError.class),
             @ApiResponse(code = 404, message = "Target message not found", response = RequestError.class),
     })
     @PatchMapping("/dialog/{userId}/{msgId}")
@@ -132,7 +132,7 @@ public class DialogServlet {
            dbMessage.getUserTo().equals(userService.get(userId))) {
             dbMessage.setText(message.getText());
             messageService.update(dbMessage);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(dbMessage, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new RequestError(403,
                                                         "access denied to target message",
@@ -141,7 +141,7 @@ public class DialogServlet {
         }
     }
 
-    @ApiOperation(value = "Delete message by message id from dialog with user")
+    @ApiOperation(value = "Delete message by message id from dialog with user(Attention: user can delete only his message)")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Message deleted successfully"),
             @ApiResponse(code = 400, message = "Invalid path variable", response = RequestError.class),

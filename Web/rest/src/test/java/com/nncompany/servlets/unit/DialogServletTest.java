@@ -14,69 +14,66 @@ import org.junit.runners.MethodSorters;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsIterableContaining.hasItem;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertEquals;
 
-
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ChatServletTest extends AbstractServletTest{
-    private User user;
+public class DialogServletTest extends AbstractServletTest {
+    private User userOne;
+    private User userTwo;
     private static Integer testMessageId;
     private Message testMessage;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Before
     public void loadValues() throws JsonProcessingException {
-        user = getUserByToken(USER_TOKEN);
-        testMessage = new Message("tytyhrJKHNjnjnjNUNJn", user, null);
+        userOne = getUserByToken(USER_TOKEN);
+        userTwo = getUserByToken(ANOTHER_USER_TOKEN);
+        testMessage = new Message("tytyhrJKHNjnjnjNUNJn", userOne, userTwo);
     }
 
     @Test
-    public void A_addMessage(){
+    public void A_addMessage() {
         testMessageId = given()
                                 .header("token", USER_TOKEN)
                                 .body(testMessage)
-                                .post("/api/rest/creds/chat")
+                                .post("/api/rest/creds/dialog/" + userTwo.getId())
                                 .then()
                                 .assertThat()
                                 .statusCode(HttpStatus.SC_CREATED)
                                 .body("id", notNullValue())
                                 .body("text", equalTo(testMessage.getText()))
-                                .body("userFrom.id", equalTo(user.getId()))
-                                .body("userTo.id", nullValue())
+                                .body("userFrom.id", equalTo(userOne.getId()))
+                                .body("userTo.id", equalTo(userTwo.getId()))
                                 .extract()
                                 .path("id");
     }
 
     @Test
-    public void B_getChat() throws JsonProcessingException {
-        String json  = given()
+    public void B_getMessage() {
+        given()
+                .header("token", USER_TOKEN)
+                .get("/api/rest/creds/dialog/" + userTwo.getId() + "/" + testMessageId)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .body("text", equalTo(testMessage.getText()));
+    }
+
+    @Test
+    public void C_getChat() throws JsonProcessingException {
+        String json = given()
                                 .header("token", USER_TOKEN)
                                 .queryParams(PAGINATION_PARAMS)
-                                .get("/api/rest/creds/chat")
+                                .get("/api/rest/creds/dialog/" + userTwo.getId())
                                 .then()
                                 .assertThat()
                                 .statusCode(HttpStatus.SC_OK)
                                 .extract()
                                 .asString();
-        ObjectMapper objectMapper = new ObjectMapper();
-        ResponseList<Message> allChat = objectMapper.readValue(json, new TypeReference<ResponseList<Message>>() {});
-        assertEquals(allChat.getList().size(), allChat.getTotal().intValue());
-    }
-
-    @Test
-    public void C_getMessage() {
-        given()
-                .header("token", USER_TOKEN)
-                .get("/api/rest/creds/chat/" + testMessageId)
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.SC_OK)
-                .body("text", equalTo(testMessage.getText()))
-                .body("id", notNullValue())
-                .body("text", equalTo(testMessage.getText()))
-                .body("userFrom.id", equalTo(user.getId()))
-                .body("userTo.id", nullValue());
+        ResponseList<Message> allDialog = objectMapper.readValue(json, new TypeReference<ResponseList<Message>>() {});
+        assertEquals(allDialog.getList().size(), allDialog.getTotal().intValue());
     }
 
     @Test
@@ -85,44 +82,41 @@ public class ChatServletTest extends AbstractServletTest{
         given()
                 .header("token", ANOTHER_USER_TOKEN)
                 .body(testMessage)
-                .patch("/api/rest/creds/chat/" + testMessageId)
-                .then()
-                .assertThat()
+                .patch("/api/rest/creds/dialog/" + userTwo.getId() + "/" + testMessageId)
+                .then().assertThat()
                 .statusCode(HttpStatus.SC_FORBIDDEN);
 
         given()
                 .header("token", USER_TOKEN)
                 .body(testMessage)
-                .patch("/api/rest/creds/chat/" + testMessageId)
-                .then()
-                .assertThat()
+                .patch("/api/rest/creds/dialog/" + userTwo.getId() + "/" + testMessageId)
+                .then().assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .body("text", equalTo(testMessage.getText()))
                 .body("id", notNullValue())
                 .body("text", equalTo(testMessage.getText()))
-                .body("userFrom.id", equalTo(user.getId()))
-                .body("userTo.id", nullValue());
+                .body("userFrom.id", equalTo(userOne.getId()))
+                .body("userTo.id", equalTo(userTwo.getId()));
     }
 
     @Test
     public void E_deleteMessage() {
         given()
                 .header("token", ANOTHER_USER_TOKEN)
-                .delete("/api/rest/creds/chat/" + testMessageId)
+                .delete("/api/rest/creds/dialog/" + userTwo.getId() + "/" + testMessageId)
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_FORBIDDEN);
 
         given()
                 .header("token", USER_TOKEN)
-                .delete("/api/rest/creds/chat/" + testMessageId)
+                .delete("/api/rest/creds/dialog/" + userTwo.getId() + "/" + testMessageId)
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_NO_CONTENT);
 
         given()
                 .header("token", USER_TOKEN)
-                .get("/api/rest/creds/chat/" + testMessageId)
+                .get("/api/rest/creds/dialog/" + userTwo.getId() + "/" + testMessageId)
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_NOT_FOUND);

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CheckRequestParamsAspect {
 
-    @Pointcut("execution(public * com.nncompany.rest.servlets.BriefingServlet.*(..)) && args(page, pageSize, ..)")
+    @Pointcut("execution(public * com.nncompany.rest.servlets.BriefingServlet.getAllBriefings(..)) && args(page, pageSize, ..)")
     public void briefings(Integer page, Integer pageSize) { }
 
     @Pointcut("execution(public * com.nncompany.rest.servlets.ChatServlet.getChatsMessages(..)) && args(page, pageSize, ..)")

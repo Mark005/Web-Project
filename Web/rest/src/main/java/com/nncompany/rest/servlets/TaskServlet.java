@@ -35,14 +35,14 @@ public class TaskServlet {
                                               @RequestParam Integer pageSize,
                                               @RequestParam TaskType type,
                                               @RequestParam TaskStatus status){
-        User loggUser = UserKeeper.getLoggedUser();
+        User loggedUser = UserKeeper.getLoggedUser();
         ResponseList responseList;
-        if(loggUser.isAdmin() || (!loggUser.isAdmin() && !type.equals(TaskType.PERSONAL))){
+        if(loggedUser.isAdmin() || (!loggedUser.isAdmin() && !type.equals(TaskType.PERSONAL))){
             responseList = new ResponseList(taskService.getAll(page, pageSize, status, type),
                                             taskService.getTotalCountForGetAll(status, type));
         } else {
-            responseList = new ResponseList(taskService.getUsersTasks(loggUser, status, type),
-                                            taskService.getTotalCountForGetUsersTasks(loggUser, status, type));
+            responseList = new ResponseList(taskService.getUsersTasks(loggedUser, status, type),
+                                            taskService.getTotalCountForGetUsersTasks(loggedUser, status, type));
         }
         return ResponseEntity.ok(responseList);
     }
@@ -77,7 +77,7 @@ public class TaskServlet {
 
     @ApiOperation(value = "Add new task")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Tasks created successfully"),
+            @ApiResponse(code = 201, message = "Tasks created successfully", response = Task.class),
             @ApiResponse(code = 400, message = "Invalid task's json, check models for more info", response = RequestError.class),
             @ApiResponse(code = 403, message = "Access denied, only admin can add tasks", response = RequestError.class),
     })
@@ -86,13 +86,13 @@ public class TaskServlet {
         task.setCreator(UserKeeper.getLoggedUser());
         task.setSatus(TaskStatus.OPEN);
         taskService.save(task);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(task, HttpStatus.CREATED);
     }
 
 
     @ApiOperation(value = "Change task's status")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Task's status changed successfully"),
+            @ApiResponse(code = 201, message = "Task's status changed successfully", response = Task.class),
             @ApiResponse(code = 400, message = "Invalid path variable or task json, check models for more info", response = RequestError.class),
             @ApiResponse(code = 404, message = "Current task not found", response = RequestError.class),
     })
@@ -108,7 +108,7 @@ public class TaskServlet {
         }
         dbTask.setSatus(task.getStatus());
         taskService.update(dbTask);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(dbTask, HttpStatus.OK);
     }
 
 

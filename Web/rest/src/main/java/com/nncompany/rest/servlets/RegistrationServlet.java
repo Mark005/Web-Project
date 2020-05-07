@@ -2,6 +2,7 @@ package com.nncompany.rest.servlets;
 
 import com.nncompany.api.interfaces.services.IUserCredsService;
 import com.nncompany.api.interfaces.services.IUserService;
+import com.nncompany.api.model.entities.User;
 import com.nncompany.api.model.entities.UserCreds;
 import com.nncompany.api.model.wrappers.BooleanResponse;
 import com.nncompany.api.model.wrappers.RequestError;
@@ -49,7 +50,7 @@ public class RegistrationServlet {
 
     @ApiOperation(value = "Registration new user")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New user registered successfully"),
+            @ApiResponse(code = 201, message = "New user registered successfully", response = User.class),
             @ApiResponse(code = 400, message = "Invalid input json, check models for more info", response = RequestError.class)
     })
     @PostMapping("/user")
@@ -57,6 +58,6 @@ public class RegistrationServlet {
         requestUserCreds.getUser().setAdmin(false);
         userService.save(requestUserCreds.getUser());
         userCredsService.save(requestUserCreds);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(requestUserCreds.getUser(), HttpStatus.CREATED);
     }
 }

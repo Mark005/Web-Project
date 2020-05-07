@@ -36,10 +36,9 @@ public abstract class AbstractServletTest {
     @Before
     public void init(){
         RestAssured.baseURI = ROOT_URL;
-        RestAssured.requestSpecification = new RequestSpecBuilder()
-                .setContentType(ContentType.JSON)
-                .setAccept(ContentType.JSON)
-                .build();
+        RestAssured.requestSpecification = new RequestSpecBuilder().setContentType(ContentType.JSON)
+                                                                   .setAccept(ContentType.JSON)
+                                                                   .build();
         ADMIN_TOKEN =  getToken(new UserCreds("admin", "admin"));
         USER_TOKEN = getToken(new UserCreds("user", "user"));
         ANOTHER_USER_TOKEN = getToken(new UserCreds("aaa", "456"));
@@ -65,9 +64,9 @@ public abstract class AbstractServletTest {
     protected User getUserByToken(String token) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = given()
-                                .header("token", token)
-                                .get("/api/rest/creds/user")
-                                .asString();
+                             .header("token", token)
+                             .get("/api/rest/creds/user")
+                             .asString();
         return objectMapper.readValue(json, User.class);
     }
 }

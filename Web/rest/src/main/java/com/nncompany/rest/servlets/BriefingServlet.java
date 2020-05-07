@@ -2,6 +2,7 @@ package com.nncompany.rest.servlets;
 
 import com.nncompany.api.interfaces.services.IBriefingService;
 import com.nncompany.api.model.entities.Briefing;
+import com.nncompany.api.model.entities.Message;
 import com.nncompany.api.model.wrappers.RequestError;
 import com.nncompany.api.model.wrappers.ResponseList;
 import io.swagger.annotations.ApiOperation;
@@ -59,21 +60,21 @@ public class BriefingServlet {
         return ResponseEntity.ok(briefing);
     }
 
-    @ApiOperation(value = "Add new briefing")
+    @ApiOperation(value = "Add new briefing (Attention: only admin can add new briefings)")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Briefing created successfully"),
+            @ApiResponse(code = 201, message = "Briefing created successfully", response = Briefing.class),
             @ApiResponse(code = 400, message = "Invalid request body, check models for more info"),
             @ApiResponse(code = 403, message = "Hasn't access, relogin as admin", response = RequestError.class)
     })
     @PostMapping("/briefings")
-    public ResponseEntity addBriefing(@RequestBody Briefing briefing){
+    public ResponseEntity<Object> addBriefing(@RequestBody Briefing briefing){
         briefingService.save(briefing);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(briefing, HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Update briefing by id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Briefing updated successfully"),
+            @ApiResponse(code = 200, message = "Briefing updated successfully", response = Briefing.class),
             @ApiResponse(code = 400, message = "Invalid request body or URL path variable, check models for more info"),
             @ApiResponse(code = 403, message = "Hasn't access, relogin as admin", response = RequestError.class),
             @ApiResponse(code = 404, message = "Briefing with current id is not found", response = RequestError.class)
@@ -89,7 +90,7 @@ public class BriefingServlet {
         }
         briefing.setId(id);
         briefingService.update(briefing);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(briefing, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Deleter briefing by id")

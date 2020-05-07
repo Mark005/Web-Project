@@ -8,7 +8,6 @@ import com.nncompany.api.model.entities.User;
 import com.nncompany.api.model.enums.TaskStatus;
 import com.nncompany.api.model.enums.TaskType;
 import com.nncompany.api.model.wrappers.ResponseList;
-import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -16,8 +15,6 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -25,56 +22,54 @@ import static org.junit.Assert.assertEquals;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TaskServletTest extends AbstractServletTest {
-    private User admin;
-    private User user;
     private static Integer taskId;
     private Task task;
-    private final String NAME = "NlhjHJbhlHbhHBHhbyonhvt";
-    private final TaskType TYPE = TaskType.PERSONAL;
-    private final TaskStatus STATUS = TaskStatus.OPEN;
-    private final TaskStatus NEW_STATUS = TaskStatus.CLOSE;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Before
     public void loadValues() throws JsonProcessingException {
-        admin = getUserByToken(ADMIN_TOKEN);
-        user = getUserByToken(USER_TOKEN);
+        User admin = getUserByToken(ADMIN_TOKEN);
+        User user = getUserByToken(USER_TOKEN);
 
         task = new Task();
             task.setCreator(admin);
             task.setExecutor(user);
-            task.setName(NAME);
-            task.setType(TYPE);
-            task.setSatus(STATUS);
-            task.setDeadline(new Date());
+            task.setName("NlhjHJbhlHbhHBHhbyonhvt");
+            task.setType(TaskType.PERSONAL);
+            task.setSatus(TaskStatus.OPEN);
+            task.setDeadline(new Date(2000, 5, 5));
     }
 
     @Test
     public void A_addTask() throws JsonProcessingException {
+
         given()
-                .header("token", ADMIN_TOKEN)
+                .header("token", USER_TOKEN)
                 .body(task)
                 .post("/api/rest/creds/tasks")
-                .then().statusCode(201);
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_FORBIDDEN);
+
+        taskId = given()
+                        .header("token", ADMIN_TOKEN)
+                        .body(task)
+                        .post("/api/rest/creds/tasks")
+                        .then()
+                        .assertThat()
+                        .statusCode(HttpStatus.SC_CREATED)
+                        .body("name", equalTo(task.getName()))
+                        .body("type", equalTo(task.getType().name()))
+                        .body("status", equalTo(task.getStatus().name()))
+                        .body("deadline", equalTo(task.getDeadline().getTime()))
+                        .body("creator.id", equalTo(task.getCreator().getId()))
+                        .body("executor.id", equalTo(task.getExecutor().getId()))
+                        .extract()
+                        .path("id");
     }
 
     @Test
     public void B_getTasks() throws JsonProcessingException {
-        Response response = given()
-                                    .header("token", ADMIN_TOKEN)
-                                    .queryParams(PAGINATION_PARAMS)
-                                    .queryParam("status", STATUS)
-                                    .queryParam("type", TYPE)
-                                    .get("/api/rest/creds/tasks");
-        assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
-        String json = response.asString();
-        ResponseList<Task> list = objectMapper.readValue(json, new TypeReference<ResponseList<Task>>() {});
-        Task lastTask = list.getList().get(list.getTotal()-1);
-        taskId = lastTask.getId();
-        assertEquals(list.getTotal().intValue(), list.getList().size());
-        assertEquals(lastTask.getName(), NAME);
-        assertEquals(lastTask.getType(), TYPE);
-        assertEquals(lastTask.getStatus(), STATUS);
 
         assertEquals(getTaskByTypeAndStatus(TaskType.PERSONAL, TaskStatus.OPEN).getType(), TaskType.PERSONAL);
         assertEquals(getTaskByTypeAndStatus(TaskType.ADJUSTMENT, TaskStatus.OPEN).getType(), TaskType.ADJUSTMENT);
@@ -110,37 +105,59 @@ public class TaskServletTest extends AbstractServletTest {
 
     @Test
     public void C_changeTask(){
-        task.setSatus(NEW_STATUS);
+        task.setSatus(TaskStatus.CLOSE);
+
         given()
                 .header("token", ADMIN_TOKEN)
                 .body(task)
                 .patch("/api/rest/creds/tasks/" + taskId)
-                .then().statusCode(200);
-
-        given()
-                .header("token", ADMIN_TOKEN)
-                .get("/api/rest/creds/tasks/" + taskId)
-                .then().statusCode(200)
-                .body("status", equalTo(NEW_STATUS.name()));
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .body("name", equalTo(task.getName()))
+                .body("type", equalTo(task.getType().name()))
+                .body("status", equalTo(task.getStatus().name()))
+                .body("deadline", equalTo(task.getDeadline().getTime()))
+                .body("creator.id", equalTo(task.getCreator().getId()))
+                .body("executor.id", equalTo(task.getExecutor().getId()));
     }
 
     @Test
     public void D_deleteTask(){
         given()
+                .header("token", USER_TOKEN)
+                .delete("/api/rest/creds/tasks/" + taskId)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_FORBIDDEN);
+
+        given()
                 .header("token", ADMIN_TOKEN)
                 .delete("/api/rest/creds/tasks/" + taskId)
-                .then().statusCode(204);
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_NO_CONTENT);
+
+        given()
+                .header("token", ADMIN_TOKEN)
+                .get("/api/rest/creds/tasks/" + taskId)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
     private Task getTaskByTypeAndStatus(TaskType type, TaskStatus status) throws JsonProcessingException {
-        Response response = given()
-                                    .header("token", ADMIN_TOKEN)
-                                    .queryParams(PAGINATION_PARAMS)
-                                    .queryParam("type", type)
-                                    .queryParam("status", status)
-                                    .get("/api/rest/creds/tasks");
-        assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
-        String json = response.asString();
+        String json = given()
+                                .header("token", ADMIN_TOKEN)
+                                .queryParams(PAGINATION_PARAMS)
+                                .queryParam("type", type)
+                                .queryParam("status", status)
+                                .get("/api/rest/creds/tasks")
+                                .then()
+                                .assertThat()
+                                .statusCode(HttpStatus.SC_OK)
+                                .extract()
+                                .asString();
         ResponseList<Task> list = objectMapper.readValue(json, new TypeReference<ResponseList<Task>>() {});
         return list.getList().get(0);
     }
