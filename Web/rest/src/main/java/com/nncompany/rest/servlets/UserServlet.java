@@ -91,7 +91,7 @@ public class UserServlet {
                           "(only admin can update someone else except itself, " +
                           "and only admin can change admin status)")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "User changed successfully"),
+            @ApiResponse(code = 200, message = "User changed successfully", response = User.class),
             @ApiResponse(code = 400, message = "Invalid path variables", response = RequestError.class),
             @ApiResponse(code = 403, message = "You have hot permission to change this user", response = RequestError.class),
             @ApiResponse(code = 404, message = "User with current id not found", response = RequestError.class)
@@ -110,12 +110,12 @@ public class UserServlet {
         if(loggedUser.isAdmin()) {
             requestUser.setId(id);
             userService.update(requestUser);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(requestUser, HttpStatus.OK);
         } else if(targetUser.equals(loggedUser)){
             requestUser.setId(id);
             requestUser.setAdmin(loggedUser.isAdmin());
             userService.update(requestUser);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(requestUser, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new RequestError(403,
                                                         "access denied",

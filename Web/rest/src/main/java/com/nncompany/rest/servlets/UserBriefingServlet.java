@@ -115,7 +115,7 @@ public class UserBriefingServlet {
 
     @ApiOperation(value = "Add new briefing conduction")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Briefing conducted successfully"),
+            @ApiResponse(code = 201, message = "Briefing conducted successfully", response = UserBriefing.class),
             @ApiResponse(code = 400, message = "Invalid user-briefing json"),
             @ApiResponse(code = 403, message = "Access denied, only admins can conduct briefings", response = RequestError.class),
             @ApiResponse(code = 404, message = "User or briefing not found", response = RequestError.class),
@@ -130,14 +130,14 @@ public class UserBriefingServlet {
                                                         HttpStatus.NOT_FOUND);
         }
         userBriefingService.save(userBriefing);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(userBriefing, HttpStatus.CREATED);
     }
 
 
     @ApiOperation(value = "Update briefing's conduction day")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Briefing's conduction day updated successfully"),
-            @ApiResponse(code = 400, message = "Invalid user-briefing json or path variable"),
+            @ApiResponse(code = 200, message = "Briefing's conduction day updated successfully", response = UserBriefing.class),
+            @ApiResponse(code = 400, message = "Invalid user-briefing json or path variable", response = RequestError.class),
             @ApiResponse(code = 403, message = "Access denied, only admins can conduct briefings", response = RequestError.class),
             @ApiResponse(code = 404, message = "Briefing conduction not found", response = RequestError.class),
     })
@@ -153,7 +153,7 @@ public class UserBriefingServlet {
         }
         dbUserBriefing.setLastDate(userBriefing.getLastDate());
         userBriefingService.update(dbUserBriefing);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(dbUserBriefing, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Delete briefing conduction")

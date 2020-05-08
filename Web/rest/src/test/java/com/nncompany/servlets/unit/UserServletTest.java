@@ -7,7 +7,6 @@ import com.nncompany.api.model.entities.User;
 import com.nncompany.api.model.entities.UserCreds;
 import com.nncompany.api.model.enums.Gender;
 import com.nncompany.api.model.wrappers.ResponseList;
-import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -15,152 +14,230 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsIterableContaining.hasItem;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserServletTest extends AbstractServletTest{
-    private ObjectMapper objectMapper;
-    private Response response;
-    private UserCreds testUserCreds;
-    private User testUser;
-    private static Integer testUserId;
-    private static String testUserToken;
+    private UserCreds userCreds;
+    private User user;
+    private static Integer userId;
+    private static String userToken;
 
     @Before
     public void loadValues(){
-        objectMapper = new ObjectMapper();
-        testUser = new User();
-            testUser.setName("New");
-            testUser.setSurname("User");
-            testUser.setGender(Gender.MALE);
-            testUser.setCertificateNumber(666);
-            testUser.setDateEmployment(new Date());
-            testUser.setProfession("slave");
-            testUser.setAdmin(true);
-        testUserCreds = new UserCreds();
-            testUserCreds.setLogin("newUniqueLogin");
-            testUserCreds.setPass("newUniqueLogin");
-            testUserCreds.setUser(testUser);
+        user = new User();
+            user.setName("New");
+            user.setSurname("User");
+            user.setGender(Gender.MALE);
+            user.setCertificateNumber(666);
+            user.setDateEmployment(new Date(2222, 2, 2));
+            user.setProfession("slave");
+            user.setAdmin(true);
+        userCreds = new UserCreds();
+            userCreds.setLogin("newUniqueLogin");
+            userCreds.setPass("newUniqueLogin");
+            userCreds.setUser(user);
     }
 
     @Test
     public void A_addUser() {
-        given()
-                .body(testUserCreds)
-                .post("/api/rest/registration/user")
-                .then().statusCode(201);
+        userId  = given()
+                        .body(userCreds)
+                        .post("/api/rest/registration/user")
+                        .then()
+                        .assertThat()
+                        .statusCode(HttpStatus.SC_CREATED)
+                        .body("id", notNullValue())
+                        .body("name", equalTo(user.getName()))
+                        .body("gender", equalTo(user.getGender().name()))
+                        .body("surname", equalTo(user.getSurname()))
+                        .body("profession", equalTo(user.getProfession()))
+                        .body("dateEmployment", equalTo(user.getDateEmployment().getTime()))
+                        .body("certificateNumber", equalTo(user.getCertificateNumber()))
+                        .body("admin", equalTo(false))
+                        .extract()
+                        .path("id");
     }
 
     @Test
     public void B_getLoggedUser() {
-        testUserToken = getToken(testUserCreds);
+        userToken = getToken(userCreds);
         given()
-                .header("token", testUserToken)
+                .header("token", userToken)
                 .get("/api/rest/creds/user")
-                .then().statusCode(200).assertThat()
-                .body("name", equalTo(testUser.getName()))
-                .body("surname", equalTo(testUser.getSurname()))
-                .body("certificateNumber", equalTo(testUser.getCertificateNumber()));
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .body("id", notNullValue())
+                .body("name", equalTo(user.getName()))
+                .body("gender", equalTo(user.getGender().name()))
+                .body("surname", equalTo(user.getSurname()))
+                .body("profession", equalTo(user.getProfession()))
+                .body("dateEmployment", equalTo(user.getDateEmployment().getTime()))
+                .body("certificateNumber", equalTo(user.getCertificateNumber()))
+                .body("admin", equalTo(false));
     }
 
     @Test
     public void C_getAllUsers() throws JsonProcessingException {
-        testUserToken = getToken(testUserCreds);
-        response = given()
-                .header("token", testUserToken)
-                .queryParams(PAGINATION_PARAMS)
-                .get("/api/rest/creds/users");
-        assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
-        String json = response.asString();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = given()
+                            .header("token", userToken)
+                            .queryParams(PAGINATION_PARAMS)
+                            .get("/api/rest/creds/users")
+                            .then()
+                            .assertThat()
+                            .statusCode(HttpStatus.SC_OK)
+                            .extract()
+                            .asString();
         ResponseList<User> responseList = objectMapper.readValue(json, new TypeReference<ResponseList<User>>() {});
         assertTrue(responseList.getTotal().longValue() == responseList.getList().size());
     }
 
     @Test
     public void D_getUser() {
-        testUserToken = getToken(testUserCreds);
-        testUserId = given()
-                .header("token", testUserToken)
-                .get("/api/rest/creds/user")
-                .jsonPath().getInt("id");
         given()
-                .header("token", testUserToken)
-                .get("/api/rest/creds/users/"+ testUserId)
-                .then().assertThat()
-                .body("name", equalTo(testUser.getName()))
-                .body("surname", equalTo(testUser.getSurname()))
-                .body("certificateNumber", equalTo(testUser.getCertificateNumber()));
+                .header("token", userToken)
+                .get("/api/rest/creds/users/"+ userId)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .body("id", equalTo(userId))
+                .body("name", equalTo(user.getName()))
+                .body("gender", equalTo(user.getGender().name()))
+                .body("surname", equalTo(user.getSurname()))
+                .body("profession", equalTo(user.getProfession()))
+                .body("dateEmployment", equalTo(user.getDateEmployment().getTime()))
+                .body("certificateNumber", equalTo(user.getCertificateNumber()))
+                .body("admin", equalTo(false));
     }
 
     @Test
     public void D_findUsers() {
         given()
-                .header("token", testUserToken)
+                .header("token", userToken)
                 .queryParams(PAGINATION_PARAMS)
-                .queryParam("searchString", testUser.getName() + " " + testUser.getSurname())
+                .queryParam("searchString", user.getName() + " " + user.getSurname())
                 .get("/api/rest/creds/users/search")
-                .then().assertThat()
+                .then()
+                .assertThat()
                 .body("total", equalTo(1))
-                .body("list.name", hasItem(testUser.getName()))
-                .body("list.surname", hasItem(testUser.getSurname()))
-                .body("list.certificateNumber", hasItem(testUser.getCertificateNumber()));
+                .body("list.id", notNullValue())
+                .body("list.name", hasItem(user.getName()))
+                .body("list.gender", hasItem(user.getGender().name()))
+                .body("list.surname", hasItem(user.getSurname()))
+                .body("list.profession", hasItem(user.getProfession()))
+                .body("list.dateEmployment", hasItem(user.getDateEmployment().getTime()))
+                .body("list.certificateNumber", hasItem(user.getCertificateNumber()))
+                .body("list.admin", hasItem(false));
 
         given()
-                .header("token", testUserToken)
+                .header("token", userToken)
                 .queryParams(PAGINATION_PARAMS)
-                .queryParam("searchString", testUser.getCertificateNumber())
+                .queryParam("searchString", user.getCertificateNumber())
                 .get("/api/rest/creds/users/search")
-                .then().assertThat()
+                .then()
+                .assertThat()
                 .body("total", equalTo(1))
-                .body("list.name", hasItem(testUser.getName()))
-                .body("list.surname", hasItem(testUser.getSurname()))
-                .body("list.certificateNumber", hasItem(testUser.getCertificateNumber()));
+                .body("list.id", notNullValue())
+                .body("list.name", hasItem(user.getName()))
+                .body("list.gender", hasItem(user.getGender().name()))
+                .body("list.surname", hasItem(user.getSurname()))
+                .body("list.profession", hasItem(user.getProfession()))
+                .body("list.dateEmployment", hasItem(user.getDateEmployment().getTime()))
+                .body("list.certificateNumber", hasItem(user.getCertificateNumber()))
+                .body("list.admin", hasItem(false));
     }
 
     @Test
     public void E_updateUser(){
-        testUser.setName("a5_e5jkl135ekg");
+        user.setName("a5_e5jkl135ekg");
+        user.setAdmin(true);
         given()
                 .header("token", USER_TOKEN)
-                .body(testUser)
-                .put("/api/rest/creds/users/"+ testUserId)
-                .then().statusCode(403);
+                .body(user)
+                .put("/api/rest/creds/users/"+ userId)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_FORBIDDEN);
+
+        given()
+                .header("token", userToken)
+                .body(user)
+                .put("/api/rest/creds/users/"+ userId)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .body("id", equalTo(userId))
+                .body("name", equalTo(user.getName()))
+                .body("gender", equalTo(user.getGender().name()))
+                .body("surname", equalTo(user.getSurname()))
+                .body("profession", equalTo(user.getProfession()))
+                .body("dateEmployment", equalTo(user.getDateEmployment().getTime()))
+                .body("certificateNumber", equalTo(user.getCertificateNumber()))
+                .body("admin", equalTo(false));
+
+        user.setName("O_______O - wow");
+        user.setAdmin(true);
 
         given()
                 .header("token", ADMIN_TOKEN)
-                .body(testUser)
-                .put("/api/rest/creds/users/"+ testUserId)
-                .then().statusCode(200);
+                .body(user)
+                .put("/api/rest/creds/users/"+ userId)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .body("id", equalTo(userId))
+                .body("name", equalTo(user.getName()))
+                .body("gender", equalTo(user.getGender().name()))
+                .body("surname", equalTo(user.getSurname()))
+                .body("profession", equalTo(user.getProfession()))
+                .body("dateEmployment", equalTo(user.getDateEmployment().getTime()))
+                .body("certificateNumber", equalTo(user.getCertificateNumber()))
+                .body("admin", equalTo(true));
 
         given()
-                .header("token", testUserToken)
-                .body(testUser)
-                .put("/api/rest/creds/users/"+ testUserId)
-                .then().statusCode(200);
-
-        given()
-                .header("token", testUserToken)
-                .get("/api/rest/creds/users/"+ testUserId)
-                .then().assertThat()
-                .body("name", equalTo(testUser.getName()));
+                .header("token", userToken)
+                .get("/api/rest/creds/users/"+ userId)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .body("id", equalTo(userId))
+                .body("name", equalTo(user.getName()))
+                .body("gender", equalTo(user.getGender().name()))
+                .body("surname", equalTo(user.getSurname()))
+                .body("profession", equalTo(user.getProfession()))
+                .body("dateEmployment", equalTo(user.getDateEmployment().getTime()))
+                .body("certificateNumber", equalTo(user.getCertificateNumber()))
+                .body("admin", equalTo(true));
     }
 
     @Test
     public void F_deleteUser(){
         given()
-                .header("token", USER_TOKEN)
-                .delete("/api/rest/creds/users/"+ testUserId)
-                .then().statusCode(403);
+                .header("token", ANOTHER_USER_TOKEN)
+                .delete("/api/rest/creds/users/"+ userId)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_FORBIDDEN);
+
         given()
-                .header("token", testUserToken)
-                .delete("/api/rest/creds/users/"+ testUserId)
-                .then().statusCode(204);
+                .header("token", userToken)
+                .delete("/api/rest/creds/users/"+ userId)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_NO_CONTENT);
+
+        given()
+                .header("token", ANOTHER_USER_TOKEN)
+                .get("/api/rest/creds/users/"+ userId)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_NOT_FOUND);
     }
 }
