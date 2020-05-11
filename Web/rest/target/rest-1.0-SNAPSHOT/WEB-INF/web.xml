@@ -6,7 +6,7 @@
 
     <context-param>
         <param-name>spring.profiles.active</param-name>
-        <param-value>test</param-value>
+        <param-value>prod</param-value>
     </context-param>
 
     <display-name>restServlet</display-name>

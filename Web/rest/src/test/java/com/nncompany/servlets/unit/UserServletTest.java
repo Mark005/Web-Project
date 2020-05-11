@@ -13,7 +13,9 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -30,12 +32,15 @@ public class UserServletTest extends AbstractServletTest{
 
     @Before
     public void loadValues(){
+        Calendar c = new GregorianCalendar(2000, 5, 5);
+        c.setTimeZone(TimeZone.getTimeZone("UTC"));
+
         user = new User();
             user.setName("New");
             user.setSurname("User");
             user.setGender(Gender.MALE);
             user.setCertificateNumber(666);
-            user.setDateEmployment(new Date(2222, 2, 2));
+            user.setDateEmployment(c.getTime());
             user.setProfession("slave");
             user.setAdmin(true);
         userCreds = new UserCreds();

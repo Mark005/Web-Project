@@ -14,7 +14,10 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -30,6 +33,8 @@ public class TaskServletTest extends AbstractServletTest {
     public void loadValues() throws JsonProcessingException {
         User admin = getUserByToken(ADMIN_TOKEN);
         User user = getUserByToken(USER_TOKEN);
+        Calendar c = new GregorianCalendar(2000, 5, 5);
+        c.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         task = new Task();
             task.setCreator(admin);
@@ -37,7 +42,7 @@ public class TaskServletTest extends AbstractServletTest {
             task.setName("NlhjHJbhlHbhHBHhbyonhvt");
             task.setType(TaskType.PERSONAL);
             task.setSatus(TaskStatus.OPEN);
-            task.setDeadline(new Date(2000, 5, 5));
+            task.setDeadline(c.getTime());
     }
 
     @Test

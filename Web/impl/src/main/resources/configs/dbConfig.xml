@@ -18,9 +18,10 @@
                   value="com.nncompany.api.model"/>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">
-                    org.hibernate.dialect.MySQL5Dialect
-                </prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                <prop key="hibernate.search.default.directory_provider">filesystem</prop>
+                <prop key="hibernate.search.default.indexBase">/var/lucene/indexes</prop>
+                <prop key="hibernate.search.lucene_version">LATEST</prop>
             </props>
         </property>
     </bean>

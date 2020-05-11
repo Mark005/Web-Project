@@ -7,7 +7,6 @@ import com.nncompany.api.model.entities.UserCreds;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.junit.Before;
 
 import org.junit.Test;
@@ -47,7 +46,7 @@ public abstract class AbstractServletTest {
     }
 
     @Test
-    public void autorizationTest(){
+    public void authorizationTest(){
         assertNotNull(ADMIN_TOKEN);
         assertNotNull(USER_TOKEN);
         assertNotNull(ANOTHER_USER_TOKEN);
