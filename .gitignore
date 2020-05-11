@@ -12,6 +12,7 @@
 
 # Package Files #
 *.jar
+*.0-SNAPSHOT.jar
 *.war
 *.nar
 *.ear

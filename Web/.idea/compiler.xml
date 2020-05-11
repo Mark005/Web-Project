@@ -6,11 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="di" />
         <module name="api" />
         <module name="impl" />
         <module name="rest" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="di" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
