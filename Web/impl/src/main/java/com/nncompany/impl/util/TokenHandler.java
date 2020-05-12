@@ -1,6 +1,7 @@
 package com.nncompany.impl.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nncompany.api.interfaces.IKeyGenerator;
 import com.nncompany.api.interfaces.ITokenHandler;
 
 import com.nncompany.api.model.entities.User;
@@ -9,6 +10,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -19,11 +21,9 @@ public class TokenHandler implements ITokenHandler {
     private Key key;
     ObjectMapper mapper = new ObjectMapper();
 
-
-    public TokenHandler(){
-        System.out.println("init");
-        //key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-        key = Keys.hmacShaKeyFor(new byte[256]);
+    @Autowired
+    public TokenHandler(IKeyGenerator keyGenerator){
+        key = keyGenerator.generateKey();
     }
 
     @Override
