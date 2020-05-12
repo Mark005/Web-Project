@@ -19,8 +19,9 @@ public class TokenHandler implements ITokenHandler {
     private Key key;
     ObjectMapper mapper = new ObjectMapper();
 
+
     public TokenHandler(){
-        System.out.println("initttt");
+        System.out.println("init");
         //key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
         key = Keys.hmacShaKeyFor(new byte[256]);
     }
