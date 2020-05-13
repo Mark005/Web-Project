@@ -1,6 +1,7 @@
 package com.nncompany.rest.servlets;
 
 import com.nncompany.api.interfaces.services.ITaskService;
+import com.nncompany.api.interfaces.services.IUserService;
 import com.nncompany.api.model.entities.Task;
 import com.nncompany.api.model.entities.User;
 import com.nncompany.api.model.enums.TaskStatus;
@@ -16,14 +17,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/rest/creds")
 public class TaskServlet {
 
     @Autowired
     ITaskService taskService;
+
+    @Autowired
+    IUserService userService;
 
     @ApiOperation(value = "Get all accessible tasks by type and status with with pagination")
     @ApiResponses(value = {
@@ -75,16 +77,31 @@ public class TaskServlet {
     }
 
 
-    @ApiOperation(value = "Add new task")
+    @ApiOperation(value = "Add new task (Attention: only admin can add new tasks)")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Tasks created successfully", response = Task.class),
             @ApiResponse(code = 400, message = "Invalid task's json, check models for more info", response = RequestError.class),
             @ApiResponse(code = 403, message = "Access denied, only admin can add tasks", response = RequestError.class),
+            @ApiResponse(code = 403, message = "Executor not found", response = RequestError.class),
     })
     @PostMapping("/tasks")
     public ResponseEntity addTask(@RequestBody Task task){
+        if(task.getExecutor() == null || task.getExecutor().getId() == null){
+            return new ResponseEntity<>(new RequestError(400,
+                                                        "executor not added",
+                                                        "add executor into request"),
+                                                        HttpStatus.BAD_REQUEST);
+        }
+        User dbExecutor = userService.get(task.getExecutor().getId());
+        if(dbExecutor == null) {
+            return new ResponseEntity<>(new RequestError(404,
+                                                        "executor not found",
+                                                        "user deleted or not created"),
+                                                        HttpStatus.NOT_FOUND);
+        }
+        task.setExecutor(dbExecutor);
         task.setCreator(UserKeeper.getLoggedUser());
-        task.setSatus(TaskStatus.OPEN);
+        task.setStatus(TaskStatus.OPEN);
         taskService.save(task);
         return new ResponseEntity<>(task, HttpStatus.CREATED);
     }
@@ -106,7 +123,7 @@ public class TaskServlet {
                                                         "task deleted or not created"),
                                                         HttpStatus.NOT_FOUND);
         }
-        dbTask.setSatus(task.getStatus());
+        dbTask.setStatus(task.getStatus());
         taskService.update(dbTask);
         return new ResponseEntity<>(dbTask, HttpStatus.OK);
     }

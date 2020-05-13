@@ -22,7 +22,6 @@ import java.util.List;
 @Transactional
 public class ServiceTest {
 
-
     @Autowired
     IBriefingService briefingService;
 
@@ -101,7 +100,7 @@ public class ServiceTest {
         task.setType(TaskType.PERSONAL);
         task.setCreator(userOne);
         task.setExecutor(userTwo);
-        task.setSatus(TaskStatus.OPEN);
+        task.setStatus(TaskStatus.OPEN);
         task.setDeadline(new Date());
 
         taskService.save(task);

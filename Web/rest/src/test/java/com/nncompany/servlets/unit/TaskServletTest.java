@@ -41,7 +41,7 @@ public class TaskServletTest extends AbstractServletTest {
             task.setExecutor(user);
             task.setName("NlhjHJbhlHbhHBHhbyonhvt");
             task.setType(TaskType.PERSONAL);
-            task.setSatus(TaskStatus.OPEN);
+            task.setStatus(TaskStatus.OPEN);
             task.setDeadline(c.getTime());
     }
 
@@ -110,7 +110,7 @@ public class TaskServletTest extends AbstractServletTest {
 
     @Test
     public void C_changeTask(){
-        task.setSatus(TaskStatus.CLOSE);
+        task.setStatus(TaskStatus.CLOSE);
 
         given()
                 .header("token", ADMIN_TOKEN)

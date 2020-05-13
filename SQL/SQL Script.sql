@@ -1,10 +1,6 @@
 -- -----------------------------------------------------
 -- Schema companyDb
 -- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema companyDb
--- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `companyDb` DEFAULT CHARACTER SET utf8 ;
 USE `companyDb` ;
 
@@ -21,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `companyDb`.`user` (
   `date_employment` DATE NOT NULL,
   `isadmin` TINYINT(1) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `certificate_number_UNIQUE` (`certificate_number` ASC) INVISIBLE)
+  UNIQUE KEY (`certificate_number`))
 ENGINE = InnoDB;
 
 
@@ -34,13 +30,13 @@ CREATE TABLE IF NOT EXISTS `companyDb`.`user_creds` (
   `pass` VARCHAR(45) NOT NULL,
   `user_fk` INT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `login_UNIQUE` (`login` ASC) VISIBLE,
-  INDEX `user_fk_idx` (`user_fk` ASC) VISIBLE,
+  UNIQUE KEY (`login`),
+  KEY (`user_fk`),
   CONSTRAINT `user_fk`
     FOREIGN KEY (`user_fk`)
     REFERENCES `companyDb`.`user` (`id`)
     ON DELETE CASCADE
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -59,21 +55,23 @@ ENGINE = InnoDB;
 -- Table `companyDb`.`user_has_briefing`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `companyDb`.`user_has_briefing` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `last_date` DATE NULL,
   `briefing_id` INT NOT NULL,
   `user_id` INT NOT NULL,
-  `last_date` DATE NULL,
-  PRIMARY KEY (`briefing_id`, `user_id`),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`briefing_id`,`user_id`),
   INDEX `fk_User_has_briefing_briefing1_idx` (`briefing_id` ASC) VISIBLE,
   CONSTRAINT `fk_User_has_briefing_User1`
     FOREIGN KEY (`user_id`)
     REFERENCES `companyDb`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_User_has_briefing_briefing1`
     FOREIGN KEY (`briefing_id`)
     REFERENCES `companyDb`.`briefing` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -86,21 +84,21 @@ CREATE TABLE IF NOT EXISTS `companyDb`.`task` (
   `type` VARCHAR(45) NOT NULL,
   `status` VARCHAR(45) NOT NULL,
   `deadline` DATE NULL,
-  `creater` INT NOT NULL,
-  `executer` INT NOT NULL,
+  `creator` INT NOT NULL,
+  `executor` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_personal_task_User1_idx` (`creater` ASC) VISIBLE,
-  INDEX `fk_task_User1_idx` (`executer` ASC) VISIBLE,
+  KEY (`creator`),
+  KEY (`executor`),
   CONSTRAINT `fk_personal_task_User1`
-    FOREIGN KEY (`creater`)
+    FOREIGN KEY (`creator`)
     REFERENCES `companyDb`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_task_User1`
-    FOREIGN KEY (`executer`)
+    FOREIGN KEY (`executor`)
     REFERENCES `companyDb`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -110,34 +108,35 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `companyDb`.`message` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `text` VARCHAR(500) NULL,
-  `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_from` INT NOT NULL,
-  `User_to` INT NOT NULL,
+  `User_to` INT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_message_User1_idx` (`user_from` ASC) VISIBLE,
-  INDEX `fk_message_User2_idx` (`User_to` ASC) VISIBLE,
+  KEY (`user_from`),
+  KEY (`User_to`),
   CONSTRAINT `fk_message_User1`
     FOREIGN KEY (`user_from`)
     REFERENCES `companyDb`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_message_User2`
     FOREIGN KEY (`User_to`)
     REFERENCES `companyDb`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
+
 
 -- -----------------------------------------------------
 -- Data for table `companyDb`.`user`
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `companyDb`;
-INSERT INTO `companyDb`.`user` (`id`, `certificate_number`, `name`, `surname`, `gender`, `profession`, `date_employment`, `isadmin`) VALUES (DEFAULT, 123, 'Tom', 'White', 'male', 'labour protection engineer', '2010-06-01', true);
-INSERT INTO `companyDb`.`user` (`id`, `certificate_number`, `name`, `surname`, `gender`, `profession`, `date_employment`, `isadmin`) VALUES (DEFAULT, 456, 'Catrin', 'Paul', 'female', 'assembler', '2011-07-01', false);
-INSERT INTO `companyDb`.`user` (`id`, `certificate_number`, `name`, `surname`, `gender`, `profession`, `date_employment`, `isadmin`) VALUES (DEFAULT, 789, 'Antony', 'Recker', 'male', 'welder', '2018-02-15', false);
-INSERT INTO `companyDb`.`user` (`id`, `certificate_number`, `name`, `surname`, `gender`, `profession`, `date_employment`, `isadmin`) VALUES (DEFAULT, 159, 'Margaret', 'Nory', 'female', 'electrician', '2016-06-21', false);
-INSERT INTO `companyDb`.`user` (`id`, `certificate_number`, `name`, `surname`, `gender`, `profession`, `date_employment`, `isadmin`) VALUES (DEFAULT, 753, 'Tonny', 'Verdeno', 'male', 'engineer', '2020-03-01', false);
+INSERT INTO `companyDb`.`user` (`id`, `certificate_number`, `name`, `surname`, `gender`, `profession`, `date_employment`, `isadmin`) VALUES (DEFAULT, 123, 'Tom', 'White', 'MALE', 'labour protection engineer', '2010-06-01', true);
+INSERT INTO `companyDb`.`user` (`id`, `certificate_number`, `name`, `surname`, `gender`, `profession`, `date_employment`, `isadmin`) VALUES (DEFAULT, 456, 'Catrin', 'Paul', 'FEMALE', 'assembler', '2011-07-01', false);
+INSERT INTO `companyDb`.`user` (`id`, `certificate_number`, `name`, `surname`, `gender`, `profession`, `date_employment`, `isadmin`) VALUES (DEFAULT, 789, 'Antony', 'Recker', 'MALE', 'welder', '2018-02-15', false);
+INSERT INTO `companyDb`.`user` (`id`, `certificate_number`, `name`, `surname`, `gender`, `profession`, `date_employment`, `isadmin`) VALUES (DEFAULT, 159, 'Margaret', 'Nory', 'FEMALE', 'electrician', '2016-06-21', false);
+INSERT INTO `companyDb`.`user` (`id`, `certificate_number`, `name`, `surname`, `gender`, `profession`, `date_employment`, `isadmin`) VALUES (DEFAULT, 753, 'Tonny', 'Verdeno', 'MALE', 'engineer', '2020-03-01', false);
 
 COMMIT;
 
@@ -176,16 +175,16 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `companyDb`;
-INSERT INTO `companyDb`.`user_has_briefing` (`briefing_id`, `user_id`, `last_date`) VALUES (1, 1, '2020-03-12');
-INSERT INTO `companyDb`.`user_has_briefing` (`briefing_id`, `user_id`, `last_date`) VALUES (2, 1, '2019-03-12');
-INSERT INTO `companyDb`.`user_has_briefing` (`briefing_id`, `user_id`, `last_date`) VALUES (1, 2, '2020-03-12');
-INSERT INTO `companyDb`.`user_has_briefing` (`briefing_id`, `user_id`, `last_date`) VALUES (4, 2, '2019-12-28');
-INSERT INTO `companyDb`.`user_has_briefing` (`briefing_id`, `user_id`, `last_date`) VALUES (1, 3, '2020-01-28');
-INSERT INTO `companyDb`.`user_has_briefing` (`briefing_id`, `user_id`, `last_date`) VALUES (1, 4, '2019-08-21');
-INSERT INTO `companyDb`.`user_has_briefing` (`briefing_id`, `user_id`, `last_date`) VALUES (4, 4, '2019-02-17');
-INSERT INTO `companyDb`.`user_has_briefing` (`briefing_id`, `user_id`, `last_date`) VALUES (5, 4, '2019-07-28');
-INSERT INTO `companyDb`.`user_has_briefing` (`briefing_id`, `user_id`, `last_date`) VALUES (1, 5, '2019-12-28');
-INSERT INTO `companyDb`.`user_has_briefing` (`briefing_id`, `user_id`, `last_date`) VALUES (3, 5, '2019-05-12');
+INSERT INTO `companyDb`.`user_has_briefing` (`id`, `last_date`, `briefing_id`, `user_id`) VALUES (DEFAULT, '2020-03-12', 1, 1);
+INSERT INTO `companyDb`.`user_has_briefing` (`id`, `last_date`, `briefing_id`, `user_id`) VALUES (DEFAULT, '2019-03-12', 2, 1);
+INSERT INTO `companyDb`.`user_has_briefing` (`id`, `last_date`, `briefing_id`, `user_id`) VALUES (DEFAULT, '2020-03-12', 1, 2);
+INSERT INTO `companyDb`.`user_has_briefing` (`id`, `last_date`, `briefing_id`, `user_id`) VALUES (DEFAULT, '2019-12-28', 4, 2);
+INSERT INTO `companyDb`.`user_has_briefing` (`id`, `last_date`, `briefing_id`, `user_id`) VALUES (DEFAULT, '2020-01-28', 1, 3);
+INSERT INTO `companyDb`.`user_has_briefing` (`id`, `last_date`, `briefing_id`, `user_id`) VALUES (DEFAULT, '2019-08-21', 1, 4);
+INSERT INTO `companyDb`.`user_has_briefing` (`id`, `last_date`, `briefing_id`, `user_id`) VALUES (DEFAULT, '2019-02-17', 4, 4);
+INSERT INTO `companyDb`.`user_has_briefing` (`id`, `last_date`, `briefing_id`, `user_id`) VALUES (DEFAULT, '2019-07-28', 5, 4);
+INSERT INTO `companyDb`.`user_has_briefing` (`id`, `last_date`, `briefing_id`, `user_id`) VALUES (DEFAULT, '2019-12-28', 1, 5);
+INSERT INTO `companyDb`.`user_has_briefing` (`id`, `last_date`, `briefing_id`, `user_id`) VALUES (DEFAULT, '2019-05-12', 3, 5);
 
 COMMIT;
 
@@ -195,18 +194,21 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `companyDb`;
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something one', 'personal', 'open', '2020-07-15', 1, 2);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something two', 'electronic', 'close', DEFAULT, 1, 3);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something three', 'welding', 'executing', DEFAULT, 1, 4);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something four', 'adjusment', 'open', DEFAULT, 1, 5);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something five', 'personal', 'open', '2020-09-03', 1, 2);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something six', 'electronic', 'open', '2020-05-28', 1, 3);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something seven', 'welding', 'close', '2020-03-19', 1, 4);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something eight', 'adjusment', 'close', '2020-02-11', 1, 5);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something nine', 'personal', 'close', '2020-03-19', 1, 2);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something ten', 'electronic', 'executing', '2020-05-19', 1, 3);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something eleven', 'welding', 'executing', '2020-06-03', 1, 4);
-INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creater`, `executer`) VALUES (DEFAULT, 'to do something twelve', 'adjusment', 'executing', '2020-06-12', 1, 5);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something one', 'PERSONAL', 'OPEN', '2020-07-15', 1, 2);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something two', 'ELECTRONIC', 'CLOSE', NULL, 1, 3);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something three', 'WELDING', 'EXECUTING', NULL, 1, 4);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something four', 'ADJUSTMENT', 'OPEN', NULL, 1, 5);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something five', 'PERSONAL', 'OPEN', '2020-09-03', 1, 2);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something six', 'ELECTRONIC', 'OPEN', '2020-05-28', 1, 3);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something seven', 'WELDING', 'CLOSE', '2020-03-19', 1, 4);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something eight', 'ADJUSTMENT', 'CLOSE', '2020-02-11', 1, 5);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something nine', 'PERSONAL', 'CLOSE', '2020-03-19', 1, 2);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something ten', 'ELECTRONIC', 'EXECUTING', '2020-05-19', 1, 3);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something eleven', 'WELDING', 'EXECUTING', '2020-06-03', 1, 4);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something twelve', 'ADJUSTMENT', 'EXECUTING', '2020-06-12', 1, 5);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something thirteen', 'WELDING', 'OPEN', '2020-03-19', 1, 2);
+INSERT INTO `companyDb`.`task` (`id`, `name`, `type`, `status`, `deadline`, `creator`, `executor`) VALUES (DEFAULT, 'to do something fourteen', 'PERSONAL', 'EXECUTING', '2020-05-19', 1, 3);
+
 
 COMMIT;
 
@@ -220,6 +222,9 @@ INSERT INTO `companyDb`.`message` (`id`, `text`, `date`, `user_from`, `User_to`)
 INSERT INTO `companyDb`.`message` (`id`, `text`, `date`, `user_from`, `User_to`) VALUES (DEFAULT, 'hi', '2020-03-20 20:21:00', 4, 1);
 INSERT INTO `companyDb`.`message` (`id`, `text`, `date`, `user_from`, `User_to`) VALUES (DEFAULT, 'what\'s up?', '2020-03-20 20:22:00', 1, 4);
 INSERT INTO `companyDb`.`message` (`id`, `text`, `date`, `user_from`, `User_to`) VALUES (DEFAULT, 'nice', '2020-03-20 20:23:00', 4, 1);
+INSERT INTO `companydb`.`message` (`text`, `date`, `user_from`) VALUES ('common', '2020-02-21 20:23:00', '2');
+INSERT INTO `companydb`.`message` (`text`, `date`, `user_from`) VALUES ('chat', '2020-02-21 20:24:00', '3');
+INSERT INTO `companydb`.`message` (`text`, `date`, `user_from`) VALUES ('messages', '2020-02-21 20:25:00', '5');
 
 COMMIT;
 

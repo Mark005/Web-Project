@@ -11,6 +11,7 @@ import org.junit.Before;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -22,8 +23,8 @@ import static io.restassured.RestAssured.*;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:web-application-context-test.xml",
-                                    "classpath:application-context-test.xml"})
+@ContextConfiguration(locations = {"classpath:application-context-test.xml"})
+@ActiveProfiles("staticKey")
 @WebAppConfiguration()
 public abstract class AbstractServletTest {
     protected String ADMIN_TOKEN;

@@ -99,7 +99,7 @@ public class ChatServlet {
             dbMessage.getUserTo() != null) {
             return new ResponseEntity<>(new RequestError(403,
                                                         "access denied for this message",
-                                                        "message with current id not from common chat"),
+                                                        "you are not creator or message with current id not from common chat"),
                                                         HttpStatus.FORBIDDEN);
         }
         dbMessage.setText(message.getText());
@@ -127,7 +127,7 @@ public class ChatServlet {
            dbMessage.getUserTo() != null) {
             return new ResponseEntity<>(new RequestError(403,
                                                         "access denied for this message",
-                                                        "message with current id not from common chat"),
+                                                        "you are not creator or message with current id not from common chat"),
                                                         HttpStatus.FORBIDDEN);
         }
         messageService.delete(dbMessage);

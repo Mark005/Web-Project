@@ -6,7 +6,7 @@
 
     <context-param>
         <param-name>spring.profiles.active</param-name>
-        <param-value>prod, randomKey</param-value>
+        <param-value>test, staticKey</param-value>
     </context-param>
 
     <display-name>restServlet</display-name>

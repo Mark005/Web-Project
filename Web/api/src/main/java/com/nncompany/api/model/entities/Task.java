@@ -67,7 +67,7 @@ public class Task {
         return status;
     }
 
-    public void setSatus(TaskStatus status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
@@ -83,15 +83,15 @@ public class Task {
         return creator;
     }
 
-    public void setCreator(User creater) {
-        this.creator = creater;
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 
     public User getExecutor() {
         return executor;
     }
 
-    public void setExecutor(User executer) {
-        this.executor = executer;
+    public void setExecutor(User executor) {
+        this.executor = executor;
     }
 }
