@@ -10,5 +10,5 @@ public interface ITokenHandler {
 
     boolean checkToken(String token);
 
-    User getUserFromToken(String token);
+    Integer getUserIdFromToken(String token);
 }

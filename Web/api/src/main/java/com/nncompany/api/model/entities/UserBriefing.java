@@ -14,14 +14,14 @@ public class UserBriefing {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    User user;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "briefing_id")
-    Briefing briefing;
+    private Briefing briefing;
 
     @Column(name = "last_date")
-    Date lastDate;
+    private Date lastDate;
 
 
 

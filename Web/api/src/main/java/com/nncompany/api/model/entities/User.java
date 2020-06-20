@@ -3,8 +3,6 @@ package com.nncompany.api.model.entities;
 import com.nncompany.api.model.enums.Gender;
 import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.hibernate.search.annotations.*;
-import org.hibernate.search.annotations.Index;
-import org.hibernate.search.bridge.builtin.IntegerBridge;
 
 import javax.persistence.*;
 import java.util.Date;

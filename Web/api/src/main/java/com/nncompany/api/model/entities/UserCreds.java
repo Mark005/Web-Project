@@ -1,7 +1,5 @@
 package com.nncompany.api.model.entities;
 
-import org.hibernate.annotations.Cascade;
-
 import javax.persistence.*;
 
 @Entity

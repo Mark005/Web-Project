@@ -24,8 +24,7 @@ public class AuthFilter extends HandlerInterceptorAdapter {
                              Object handler){
         String token = request.getHeader("token");
         if (tokenHandler.checkToken(token)) {
-            User inputUser = tokenHandler.getUserFromToken(token);
-            User dbUser = userService.get(inputUser.getId());
+            User dbUser = userService.get(tokenHandler.getUserIdFromToken(token));
             UserKeeper.setLoggedUser(dbUser);
             return true;
         } else {

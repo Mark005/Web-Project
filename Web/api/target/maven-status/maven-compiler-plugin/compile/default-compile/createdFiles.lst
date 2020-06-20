@@ -15,6 +15,7 @@ com\nncompany\api\model\enums\UserBriefingSort.class
 com\nncompany\api\model\wrappers\RequestError.class
 com\nncompany\api\interfaces\stors\IUserCredsStore.class
 com\nncompany\api\model\entities\User.class
+com\nncompany\api\interfaces\IKeyGenerator.class
 com\nncompany\api\interfaces\stors\IBriefingStore.class
 com\nncompany\api\model\enums\Direction.class
 com\nncompany\api\interfaces\services\IUserService.class
@@ -23,8 +24,8 @@ com\nncompany\api\model\entities\Task.class
 com\nncompany\api\interfaces\services\ITaskService.class
 com\nncompany\api\model\enums\TaskType.class
 com\nncompany\api\interfaces\services\IBriefingService.class
-com\nncompany\api\model\enums\TaskSatus.class
 com\nncompany\api\model\wrappers\BooleanResponse.class
 com\nncompany\api\exception\DBException.class
 com\nncompany\api\interfaces\stors\IMessageStore.class
+com\nncompany\api\model\enums\TaskStatus.class
 com\nncompany\api\interfaces\stors\IUserBriefingStore.class

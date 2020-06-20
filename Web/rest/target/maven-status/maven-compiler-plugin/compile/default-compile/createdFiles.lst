@@ -1,3 +1,4 @@
+com\nncompany\rest\servlets\AuthorizationServlet.class
 com\nncompany\rest\servlets\RegistrationServlet.class
 com\nncompany\rest\servlets\UserServlet.class
 com\nncompany\rest\filters\AuthFilter.class
@@ -7,7 +8,6 @@ com\nncompany\rest\aspects\CheckPathVariablesAspect.class
 com\nncompany\rest\servlets\UserBriefingServlet.class
 com\nncompany\rest\aspects\LoggerAspect.class
 com\nncompany\rest\servlets\ChatServlet.class
-com\nncompany\rest\servlets\AutorizationServlet.class
 com\nncompany\rest\servlets\TaskServlet.class
 com\nncompany\rest\servlets\DialogServlet.class
 com\nncompany\rest\aspects\CheckRequestParamsAspect.class

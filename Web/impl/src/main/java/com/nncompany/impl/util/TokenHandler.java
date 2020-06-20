@@ -19,7 +19,6 @@ import java.security.Key;
 public class TokenHandler implements ITokenHandler {
 
     private Key key;
-    ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     public TokenHandler(IKeyGenerator keyGenerator){
@@ -49,16 +48,13 @@ public class TokenHandler implements ITokenHandler {
     }
 
     @Override
-    public User getUserFromToken(String token){
-        Claims claims = Jwts.parser().setSigningKey(key)
-                .parseClaimsJws(token).getBody();
-        String json =  claims.getSubject();
-        User user = null;
+    public Integer getUserIdFromToken(String token){
+        Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+        String userId =  claims.getSubject();
         try {
-            user = mapper.readValue(json, User.class);
+            return Integer.parseInt(userId);
         } catch (Exception e){
             return null;
         }
-        return user;
     }
 }
