@@ -1,6 +1,5 @@
 package com.nncompany.rest.servlets;
 
-import com.google.gson.JsonObject;
 import com.nncompany.api.interfaces.ITokenHandler;
 import com.nncompany.api.interfaces.services.IUserCredsService;
 import com.nncompany.api.model.wrappers.RequestError;
@@ -41,10 +40,8 @@ public class AuthorizationServlet {
         UserCreds userCreds = userCredsService.getUserCredsByLoginAndPass(requestUserCreds.getLogin(),
                                                                           requestUserCreds.getPass());
         if(userCreds != null) {
-            JsonObject userJsonObj = new JsonObject();
-            userJsonObj.addProperty("id", userCreds.getUser().getId());
-            String json = userJsonObj.toString();
-            return ResponseEntity.ok(new Token(tokenHandler.getToken(json)));
+            Integer userId = userCreds.getUser().getId();
+            return ResponseEntity.ok(new Token(tokenHandler.getToken(userId.toString())));
         } else {
             return new ResponseEntity<>(new RequestError(404,
                                                         "current user not found",

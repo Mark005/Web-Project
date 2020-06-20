@@ -122,13 +122,16 @@ public class UserBriefingServlet {
     })
     @PostMapping("/conducted")
     public ResponseEntity addConductedBriefing(@RequestBody UserBriefing userBriefing) {
-        if(userService.get(userBriefing.getUser().getId()) == null ||
-            briefingService.get(userBriefing.getBriefing().getId()) == null){
+        User dbUser = userService.get(userBriefing.getUser().getId());
+        Briefing dbBriefing = briefingService.get(userBriefing.getBriefing().getId());
+        if(dbUser == null || dbBriefing == null){
             return new ResponseEntity<>(new RequestError(404,
                                                         "user or briefing not found",
                                                         "user or briefing deleted or not created"),
                                                         HttpStatus.NOT_FOUND);
         }
+        userBriefing.setUser(dbUser);
+        userBriefing.setBriefing(dbBriefing);
         userBriefingService.save(userBriefing);
         return new ResponseEntity<>(userBriefing, HttpStatus.CREATED);
     }

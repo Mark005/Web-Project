@@ -12,10 +12,8 @@
 
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-        <property name="dataSource"
-                  ref="dataSource"/>
-        <property name="packagesToScan"
-                  value="com.nncompany.api.model"/>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.nncompany.api.model"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>

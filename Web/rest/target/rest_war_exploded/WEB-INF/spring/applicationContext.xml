@@ -7,7 +7,7 @@
 
 
     <beans profile="test">
-        <import resource="classpath:web-application-context-test.xml" />
+        <import resource="classpath:application-context-test.xml" />
     </beans>
 
     <beans profile="prod">

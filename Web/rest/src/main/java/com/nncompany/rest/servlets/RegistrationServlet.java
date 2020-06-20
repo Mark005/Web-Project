@@ -51,10 +51,17 @@ public class RegistrationServlet {
     @ApiOperation(value = "Registration new user")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New user registered successfully", response = User.class),
-            @ApiResponse(code = 400, message = "Invalid input json, check models for more info", response = RequestError.class)
+            @ApiResponse(code = 400, message = "Invalid input json (check models for more info), " +
+                                               "or current login is already exist", response = RequestError.class)
     })
     @PostMapping("/user")
     public ResponseEntity registration(@RequestBody UserCreds requestUserCreds) {
+        if (userCredsService.checkLogin(requestUserCreds.getLogin())) {
+            return new ResponseEntity<>(new RequestError(400,
+                                                        "login isn't unique",
+                                                        "current login is already exist"),
+                                                        HttpStatus.BAD_REQUEST);
+        }
         requestUserCreds.getUser().setAdmin(false);
         userService.save(requestUserCreds.getUser());
         userCredsService.save(requestUserCreds);

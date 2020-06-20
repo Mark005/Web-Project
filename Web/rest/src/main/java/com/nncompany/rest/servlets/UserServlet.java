@@ -25,7 +25,7 @@ public class UserServlet {
     @ApiOperation(value = "Get current logged user")
     @ApiResponse(code = 200, message = "User returned successfully", response = User.class)
     @GetMapping("/user")
-    public ResponseEntity<User> getLoggedUser(){
+    public ResponseEntity<User> getLoggedUser() {
         return ResponseEntity.ok(UserKeeper.getLoggedUser());
     }
 
@@ -36,7 +36,7 @@ public class UserServlet {
     })
     @GetMapping("/users")
     public ResponseEntity<Object> getUsers(@RequestParam Integer page,
-                                           @RequestParam Integer pageSize){
+                                           @RequestParam Integer pageSize) {
         return ResponseEntity.ok(new ResponseList(userService.getWithPagination(page, pageSize),
                                                   userService.getTotalCount()));
     }
@@ -48,9 +48,9 @@ public class UserServlet {
             @ApiResponse(code = 404, message = "User with current id not found", response = RequestError.class)
     })
     @GetMapping("/users/{id}")
-    public ResponseEntity<Object> getUserById(@PathVariable Integer id){
+    public ResponseEntity<Object> getUserById(@PathVariable Integer id) {
         User user = userService.get(id);
-        if(user == null) {
+        if (user == null) {
             return new ResponseEntity<>(new RequestError(404,
                                                         "user not found",
                                                         "user deleted or not created"),
@@ -68,28 +68,27 @@ public class UserServlet {
     @GetMapping("/users/search")
     public ResponseEntity<Object> findUsers(@RequestParam Integer page,
                                             @RequestParam Integer pageSize,
-                                            @RequestParam String searchString){
+                                            @RequestParam String searchString) {
         List<User> users = userService.search(searchString);
-        if(users == null || users.size() == 0) {
+        if (users == null || users.size() == 0) {
             return new ResponseEntity<>(new RequestError(404,
                                                         "users not found",
                                                         "users with this criteria not found"),
                                                         HttpStatus.NOT_FOUND);
         }
         ResponseList<User> responseList = new ResponseList();
-        Integer firstItem = page*pageSize;
-        Integer lastItem = page*pageSize+pageSize;
+        Integer firstItem = page * pageSize;
+        Integer lastItem = page * pageSize + pageSize;
         responseList.setList(users.subList(firstItem > users.size() ? users.size() : firstItem,
-                                           lastItem  > users.size() ? users.size() : lastItem));
+                lastItem > users.size() ? users.size() : lastItem));
         responseList.setTotal(users.size());
         return ResponseEntity.ok(responseList);
     }
 
 
-
     @ApiOperation(value = "Update user by id except admin status " +
-                          "(only admin can update someone else except itself, " +
-                          "and only admin can change admin status)")
+            "(only admin can update someone else except itself, " +
+            "and only admin can change admin status)")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "User changed successfully", response = User.class),
             @ApiResponse(code = 400, message = "Invalid path variables", response = RequestError.class),
@@ -98,20 +97,20 @@ public class UserServlet {
     })
     @PutMapping("/users/{id}")
     public ResponseEntity updateUser(@PathVariable Integer id,
-                                     @RequestBody User requestUser){
+                                     @RequestBody User requestUser) {
         User loggedUser = UserKeeper.getLoggedUser();
         User targetUser = userService.get(id);
-        if(targetUser == null) {
+        if (targetUser == null) {
             return new ResponseEntity<>(new RequestError(404,
                                                         "user not found",
                                                         "user deleted or not created"),
                                                         HttpStatus.NOT_FOUND);
         }
-        if(loggedUser.isAdmin()) {
+        if (loggedUser.isAdmin()) {
             requestUser.setId(id);
             userService.update(requestUser);
             return new ResponseEntity<>(requestUser, HttpStatus.OK);
-        } else if(targetUser.equals(loggedUser)){
+        } else if (targetUser.equals(loggedUser)) {
             requestUser.setId(id);
             requestUser.setAdmin(loggedUser.isAdmin());
             userService.update(requestUser);
@@ -132,16 +131,16 @@ public class UserServlet {
             @ApiResponse(code = 404, message = "User with current id not found", response = RequestError.class)
     })
     @DeleteMapping("/users/{id}")
-    public ResponseEntity deleteUser(@PathVariable Integer id){
+    public ResponseEntity deleteUser(@PathVariable Integer id) {
         User targetUser = userService.get(id);
         User loggedUser = UserKeeper.getLoggedUser();
-        if(targetUser == null) {
+        if (targetUser == null) {
             return new ResponseEntity<>(new RequestError(404,
                                                         "user not found",
                                                         "user deleted or not created"),
                                                         HttpStatus.NOT_FOUND);
         }
-        if(targetUser.equals(loggedUser) ||  loggedUser.isAdmin()) {
+        if (targetUser.equals(loggedUser) || loggedUser.isAdmin()) {
             userService.delete(targetUser);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
