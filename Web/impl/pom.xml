@@ -14,7 +14,7 @@
     <version>1.0-SNAPSHOT</version>
     <properties>
         <jwt.version>0.11.0</jwt.version>
-        <jackson.version>2.10.2</jackson.version>
+        <jackson.version>2.12.6.1</jackson.version>
     </properties>
 
     <dependencies>
